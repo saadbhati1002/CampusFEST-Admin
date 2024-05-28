@@ -1,0 +1,100 @@
+{
+  "project_info": {
+    "project_number": "131061473117",
+    "project_id": "campusfest-66cd5",
+    "storage_bucket": "campusfest-66cd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131061473117:android:18617c34cbb525395412b4",
+        "android_client_info": {
+          "package_name": "com.campusfest.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131061473117-dt7af8b4m7132ntu8ap9au93b2ovacff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campusfest.admin",
+            "certificate_hash": "18eebd7230ca0f227f90c010ce61042a5e23df89"
+          }
+        },
+        {
+          "client_id": "131061473117-jh27m5rup4e5cvs8hkeu6n1pfn84nja0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campusfest.admin",
+            "certificate_hash": "83eb768be06325ca5460f4d4dd95b8c0270403eb"
+          }
+        },
+        {
+          "client_id": "131061473117-i5teg4u0d827i2fvcd48vgvft9bv8l0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfDCTljFT0BCr-1nRI7T2IUbmf7XVvXdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131061473117-i5teg4u0d827i2fvcd48vgvft9bv8l0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131061473117:android:1dc2d8a938b72a825412b4",
+        "android_client_info": {
+          "package_name": "com.campusfest.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131061473117-ehklu1grk4s9ao9gn2fsuju8cntohq5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campusfest.customer",
+            "certificate_hash": "18eebd7230ca0f227f90c010ce61042a5e23df89"
+          }
+        },
+        {
+          "client_id": "131061473117-ocjf7d17b5hdqdi727q1gl31probu1p1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campusfest.customer",
+            "certificate_hash": "83eb768be06325ca5460f4d4dd95b8c0270403eb"
+          }
+        },
+        {
+          "client_id": "131061473117-i5teg4u0d827i2fvcd48vgvft9bv8l0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfDCTljFT0BCr-1nRI7T2IUbmf7XVvXdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131061473117-i5teg4u0d827i2fvcd48vgvft9bv8l0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
