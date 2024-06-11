@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goevent_admin/Ticket_Details.dart';
-import 'package:goevent_admin/api/Api_werper.dart';
-import 'package:goevent_admin/api/Data_save.dart';
-import 'package:goevent_admin/login.dart';
-import 'package:goevent_admin/utils/Colors.dart';
+import 'package:event/Ticket_Details.dart';
+import 'package:event/api/Api_werper.dart';
+import 'package:event/api/Data_save.dart';
+import 'package:event/login.dart';
+import 'package:event/utils/Colors.dart';
 import 'agent_chat_screen/chats_list.dart';
 
 Map qrCodeResult = {};
@@ -39,43 +39,53 @@ class _ScanPageState extends State<ScanPage> {
       child: Scaffold(
         key: key,
         appBar: AppBar(
-            backgroundColor: appcolor,
-            elevation: 0,
-            leading: const BackButton(color: Colors.transparent),
-            title: Text('QR Code Scanner', style: TextStyle(color: WhiteColor, fontFamily: "Gilroy Bold")),
-            actions: [
-              InkWell(
-                onTap: () {
-                  Get.to(() => const ChatList());
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15,bottom: 15),
-                  child: Container(
-                    height: 30,
-                    width: 60,
-                    decoration: BoxDecoration(
+          backgroundColor: AppColors.appColor,
+          elevation: 0,
+          leading: const BackButton(color: Colors.transparent),
+          title: const Text(
+            'QR Code Scanner',
+            style: TextStyle(
+              color: AppColors.whiteColor,
+              fontFamily: "Gilroy Bold",
+            ),
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Get.to(() => const ChatList());
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15, bottom: 15),
+                child: Container(
+                  height: 30,
+                  width: 60,
+                  decoration: BoxDecoration(
                       border: Border.all(color: Colors.white),
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: const Center(child: Text('Chat',style: TextStyle(color: Colors.white))),
-                  ),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: const Center(
+                      child:
+                          Text('Chat', style: TextStyle(color: Colors.white))),
                 ),
               ),
-              const SizedBox(width: 15,),
-            ],
-            centerTitle: true,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+          ],
+          centerTitle: true,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Scan the code to see the ticket",
-                style: TextStyle(
-                    fontSize: 27.0,
-                    fontFamily: "Gilroy Bold",
-                    color: BlackColor),
-                textAlign: TextAlign.center),
-
+            const Text(
+              "Scan the code to see the ticket",
+              style: TextStyle(
+                  fontSize: 27.0,
+                  fontFamily: "Gilroy Bold",
+                  color: AppColors.blackColor),
+              textAlign: TextAlign.center,
+            ),
             GestureDetector(
               onLongPress: () {},
               child: SelectableText(
@@ -83,7 +93,7 @@ class _ScanPageState extends State<ScanPage> {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                     fontSize: 16.0, fontFamily: "Gilroy Medium"),
-                cursorColor: RedColor,
+                cursorColor: AppColors.redColor,
                 showCursor: true,
                 toolbarOptions: const ToolbarOptions(
                   copy: true,
@@ -97,15 +107,16 @@ class _ScanPageState extends State<ScanPage> {
               height: 10.0,
             ),
             Container(
-              padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+              padding:
+                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
               height: 68.0,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: appcolor,
-                  backgroundColor: WhiteColor,
+                  foregroundColor: AppColors.appColor,
+                  backgroundColor: AppColors.whiteColor,
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color: appcolor,
+                    side: const BorderSide(
+                      color: AppColors.appColor,
                       width: 1.0,
                       style: BorderStyle.solid,
                     ),
@@ -121,10 +132,10 @@ class _ScanPageState extends State<ScanPage> {
                   );
                   if (qCodeResult.isNotEmpty) {
                     Get.to(
-                      () => TicketDetailPage(tikitdata: qCodeResult),
+                      () => TicketDetailPage(ticketData: qCodeResult),
                     );
                   } else {
-                    ApiWrapper.showToastMessage("Plese Scan Qr Code");
+                    ApiWrapper.showToastMessage("Please Scan Qr Code");
                   }
                   // qCodeResult = "";
                 },
@@ -134,7 +145,6 @@ class _ScanPageState extends State<ScanPage> {
                 ),
               ),
             ),
-
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: InkWell(
@@ -145,13 +155,13 @@ class _ScanPageState extends State<ScanPage> {
                       Get.to(() => const LoginScreen());
                     });
                   },
-                  child: Align(
+                  child: const Align(
                     alignment: Alignment.center,
                     child: Text(
                       "Logout",
                       style: TextStyle(
                           fontFamily: "Gilroy Medium",
-                          color: appcolor,
+                          color: AppColors.appColor,
                           fontSize: 16),
                     ),
                   )),

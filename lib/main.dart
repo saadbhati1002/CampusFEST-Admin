@@ -8,11 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:goevent_admin/home_page.dart';
-import 'package:goevent_admin/api/Data_save.dart';
-import 'package:goevent_admin/firebase_options.dart';
-import 'package:goevent_admin/login.dart';
-import 'agent_chat_screen/chat_screen.dart';
+import 'package:event/home_page.dart';
+import 'package:event/api/Data_save.dart';
+
+import 'package:event/login.dart';
 
 void main() async {
   await GetStorage.init();
@@ -104,28 +103,6 @@ void listenFCM() async {
 
 Future<void> initializeNotifications() async {
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-
-  // await flutterLocalNotificationsPlugin.initialize(
-  //   initializationSettings,
-  //
-  //   onSelectNotification: (String? payload) async {
-  //     if (payload != null) {
-  //       Map data = jsonDecode(payload);
-  //       // Navigate to the DetailPage when notification is clicked
-  //
-  //       Get.to(ChatPage(
-  //         proPic: data["propic"],
-  //         resiverUserId: data["id"],
-  //         resiverUseremail: data["name"],
-  //       ));
-  //     }
-  //   },
-  // );
 }
 
 void loadFCM() async {

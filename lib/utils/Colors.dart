@@ -2,31 +2,30 @@
 
 import 'package:flutter/material.dart';
 
-Color WhiteColor = const Color(0xffFFFFFF);
-Color BlackColor = const Color(0xff000000);
-Color bgcolor = const Color(0xFFEEEEEE);
-// Color greyColor = const Color(0xffA7AEC1);
-Color Darkblue = Color.fromRGBO(255, 33, 74, 1);
-Color yelloColor = const Color(0xffFFBB0D);
-Color RedColor = const Color(0xffFF4747);
-Color lightgrey = const Color(0xffDDDDDD);
-Color darkmode = const Color(0xff111315);
-Color boxcolor = const Color(0xff202427);
-Color greycolor = const Color(0xff9e9e9e);
-Color Greycolor = const Color(0xffA7AEC1);
-Color perpulshadow = const Color(0xffede3ed);
-Color buttonColor = Color.fromRGBO(255, 33, 74, 1);
-Color blueColor = Color.fromRGBO(255, 33, 74, 1);
-Color greenColor = const Color(0xff00ff00);
-Color gradientColor = const Color(0xff00D261);
-Color brownColor = const Color(0xff481f01);
-Color orangeColor = const Color(0xffff9933);
-Color lightyello = const Color(0xfff4c430);
-Color redgradient = const Color(0xffFF6B6B);
-// ignore: use_full_hex_values_for_flutter_colors
-Color textcolor = const Color(0xffF071731);
-// ignore: use_full_hex_values_for_flutter_colors
-Color yellowshadow = const Color(0xffFfff6e9);
-Color greentext = const Color(0xff20BC3B);
-Color bordercolor = const Color(0xffF5F2FB);
-Color appcolor = Color.fromRGBO(255, 33, 74, 1);
+class AppColors {
+  static const Color whiteColor = Color(0xffFFFFFF);
+  static const Color blackColor = Color(0xff000000);
+  static const Color bgColor = Color(0xFFEEEEEE);
+  static const Color darkblue = Color(0xFFFF214A);
+  static const Color yellowColor = Color(0xffFFBB0D);
+  static const Color redColor = Color(0xffFF4747);
+  static const Color lightgrey = Color(0xffDDDDDD);
+  static const Color darkMode = Color(0xff111315);
+  static const Color boxColor = Color(0xff202427);
+  static const Color greyColor = Color(0xff9e9e9e);
+  static const Color greyColorLight = Color(0xffA7AEC1);
+  static const Color purpleShadow = Color(0xffede3ed);
+  static const Color buttonColor = Color(0xFFFF214A);
+  static const Color blueColor = Color(0xFFFF214A);
+  static const Color greenColor = Color(0xff00ff00);
+  static const Color gradientColor = Color(0xff00D261);
+  static const Color brownColor = Color(0xff481f01);
+  static const Color orangeColor = Color(0xffff9933);
+  static const Color lightYellow = Color(0xfff4c430);
+  static const Color redGradient = Color(0xffFF6B6B);
+  static const Color textColor = Color(0xFF071731);
+  static const Color yellowShadow = Color(0xFFFFF6E9);
+  static const Color greenText = Color(0xff20BC3B);
+  static const Color borderColor = Color(0xffF5F2FB);
+  static const Color appColor = Color(0xFFFF214A);
+}

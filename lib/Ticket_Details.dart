@@ -1,16 +1,14 @@
-// ignore_for_file: unnecessary_null_comparison, deprecated_member_use, file_names, non_constant_identifier_names, avoid_print, prefer_interpolation_to_compose_strings, unused_local_variable, prefer_typing_uninitialized_variables, unused_catch_clause, unnecessary_brace_in_string_interps, unused_element, unrelated_type_equality_checks
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:goevent_admin/home_page.dart';
-import 'package:goevent_admin/api/Api_werper.dart';
-import 'package:goevent_admin/api/Data_save.dart';
-import 'package:goevent_admin/api/confrigation.dart';
-import 'package:goevent_admin/model/ticket_info.dart';
-import 'package:goevent_admin/utils/Colors.dart';
+import 'package:event/home_page.dart';
+import 'package:event/api/Api_werper.dart';
+import 'package:event/api/Data_save.dart';
+import 'package:event/api/confrigation.dart';
+import 'package:event/model/ticket_info.dart';
+import 'package:event/utils/Colors.dart';
 import 'package:intl/intl.dart';
 
 import 'package:http/http.dart' as http;
@@ -20,8 +18,8 @@ Map ticketData = {};
 
 class TicketDetailPage extends StatefulWidget {
   final String? eID;
-  final String? tikitdata;
-  const TicketDetailPage({Key? key, this.eID, this.tikitdata})
+  final String? ticketData;
+  const TicketDetailPage({Key? key, this.eID, this.ticketData})
       : super(key: key);
 
   @override
@@ -33,8 +31,8 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
   Uint8List? capturedImage;
   bool isLoading = false;
   TicketInfo? ticketInfo;
-  List<TicketInfo> tikit = [];
-  var resultTikit;
+  List<TicketInfo> tickets = [];
+  var resultTicket;
 
   String jsonString = "";
   String datastore = "";
@@ -77,12 +75,12 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
   }
 
   Future<String> _loadChatsAsset() async {
-    return await rootBundle.loadString(widget.tikitdata ?? "");
+    return await rootBundle.loadString(widget.ticketData ?? "");
   }
 
   Future<List<TicketInfo>> loadChats() async {
     String jsonString = await _loadChatsAsset();
-    var massage = tikit;
+    var massage = tickets;
     final messagesJson = json.decode(jsonString);
     for (var messageJson in messagesJson) {
       massage.add(TicketInfo.fromJson(messageJson));
@@ -105,7 +103,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                   onTap: () {
                     setState(() {
                       tapped = tapped;
-                      Verifyticket();
+                      VerifyTicket();
                     });
                   },
                   child: Container(
@@ -114,14 +112,14 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: appcolor),
-                    child: Center(
+                        color: AppColors.appColor),
+                    child: const Center(
                       child: Text(
-                        "Verifyed",
+                        "Verified",
                         style: TextStyle(
                             fontFamily: "Gilroy Bold",
                             fontSize: 16,
-                            color: WhiteColor),
+                            color: AppColors.whiteColor),
                       ),
                     ),
                   ),
@@ -130,7 +128,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                   onTap: () {
                     setState(() {
                       tapped = !tapped;
-                      Verifyticket();
+                      VerifyTicket();
                     });
                   },
                   child: Container(
@@ -139,44 +137,43 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: appcolor),
-                    child: Center(
+                        color: AppColors.appColor),
+                    child: const Center(
                       child: Text(
                         "Verify",
                         style: TextStyle(
                             fontFamily: "Gilroy Bold",
                             fontSize: 16,
-                            color: WhiteColor),
+                            color: AppColors.whiteColor),
                       ),
                     ),
                   ),
                 )),
       appBar: AppBar(
-        leading: BackButton(color: WhiteColor),
+        leading: const BackButton(color: AppColors.whiteColor),
         elevation: 0,
-        backgroundColor: appcolor,
+        backgroundColor: AppColors.appColor,
         centerTitle: false,
-        title: Text(
+        title: const Text(
           "E-Ticket",
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
               fontFamily: 'Gilroy Medium',
-              color: WhiteColor),
+              color: AppColors.whiteColor),
         ),
       ),
-      backgroundColor: WhiteColor,
+      backgroundColor: AppColors.whiteColor,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Screenshot(
                 controller: screenshotController,
                 child: SingleChildScrollView(
                   child: !isLoading
                       ? Container(
-                          color: WhiteColor,
+                          color: AppColors.whiteColor,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             child: Column(
@@ -314,7 +311,6 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                                     title: "Current Date",
                                     subtitle: formattedDate),
                                 SizedBox(height: Get.height * 0.02),
-
                               ],
                             ),
                           ),
@@ -336,15 +332,18 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                 fontSize: 14, fontFamily: 'Gilroy Medium', color: Colors.grey)),
         Ink(
           width: Get.width * 0.50,
-          child: Text(subtitle ?? "",
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Gilroy Medium',
-                  color: BlackColor)),
+          child: Text(
+            subtitle ?? "",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            textAlign: TextAlign.end,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Gilroy Medium',
+              color: AppColors.blackColor,
+            ),
+          ),
         ),
       ],
     );
@@ -374,11 +373,11 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     textAlign: TextAlign.end,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
                         fontFamily: 'Gilroy Medium',
-                        color: BlackColor)),
+                        color: AppColors.blackColor)),
               ),
               SizedBox(child: textCopy)
             ],
@@ -399,16 +398,17 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
         Text(subtitle ?? "",
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Gilroy Medium',
-                color: BlackColor)),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Gilroy Medium',
+              color: AppColors.blackColor,
+            )),
       ],
     );
   }
 
-  Verifyticket() async {
+  VerifyTicket() async {
     try {
       Map map = {
         "uid": ticketData["uid"],

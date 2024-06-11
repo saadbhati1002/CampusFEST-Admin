@@ -3,13 +3,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goevent_admin/home_page.dart';
-import 'package:goevent_admin/agent_chat_screen/auth_service.dart';
-import 'package:goevent_admin/api/Api_werper.dart';
-import 'package:goevent_admin/api/Data_save.dart';
-import 'package:goevent_admin/api/confrigation.dart';
-import 'package:goevent_admin/utils/Colors.dart';
-import 'package:goevent_admin/utils/custom_widget.dart';
+import 'package:event/home_page.dart';
+import 'package:event/agent_chat_screen/auth_service.dart';
+import 'package:event/api/Api_werper.dart';
+import 'package:event/api/Data_save.dart';
+import 'package:event/api/confrigation.dart';
+import 'package:event/utils/Colors.dart';
+import 'package:event/utils/custom_widget.dart';
 import 'package:http/http.dart' as http;
 
 class LoginScreen extends StatefulWidget {
@@ -37,16 +37,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WhiteColor,
-      appBar: CustomAppbar(
-          backbutton: BackButton(
-            color: BlackColor,
-          ),
-          actionicon: null,
-          center: true,
-          centertext: "Login",
-          onclick: () {},
-          redi: 0),
+      backgroundColor: AppColors.whiteColor,
+      appBar: CustomAppBar(
+        backButton: const BackButton(
+          color: AppColors.blackColor,
+        ),
+        actionIcon: null,
+        center: true,
+        centerText: "Login",
+        onClick: () {},
+        radius: 0,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -55,85 +56,95 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Text("Let's Sign You In",
-                      style: TextStyle(
-                          fontFamily: "Gilroy Bold",
-                          fontSize: 22,
-                          color: BlackColor)),
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: Text(
+                    "Let's Sign You In",
+                    style: TextStyle(
+                        fontFamily: "Gilroy Bold",
+                        fontSize: 22,
+                        color: AppColors.blackColor),
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
+                const Padding(
+                  padding: EdgeInsets.only(top: 5),
                   child: Text("Welcome back, you've been missed",
                       style: TextStyle(
                           fontFamily: "Gilroy Medium",
                           fontSize: 18,
-                          color: BlackColor)),
+                          color: AppColors.blackColor)),
                 ),
                 Padding(
                     padding: const EdgeInsets.only(top: 30),
                     child: textfield(
                         controller: Mobile,
-                        feildcolor: bgcolor,
-                        labelcolor: greycolor,
+                        fieldColor: AppColors.bgColor,
+                        labelColor: AppColors.greyColor,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your Email';
                           }
                           return null;
                         },
-                        text: "Enter Your Username")),
+                        text: "Enter Your Email")),
                 Padding(
                     padding: const EdgeInsets.only(top: 25),
-                    child: passwordtextfield()),
+                    child: passwordTextfield()),
                 Row(
                   children: [
                     Theme(
-                      data: ThemeData(unselectedWidgetColor: BlackColor),
+                      data: ThemeData(
+                          unselectedWidgetColor: AppColors.blackColor),
                       child: Checkbox(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(4)),
                         value: isChecked,
-                        activeColor: BlackColor,
+                        activeColor: AppColors.blackColor,
                         onChanged: (value) {
-                          setState(() {
-                            isChecked = value!;
-                            save("Remember", value);
-                          });
+                          setState(
+                            () {
+                              isChecked = value!;
+                              save("Remember", value);
+                            },
+                          );
                         },
                       ),
                     ),
-                    Text(
+                    const Text(
                       "Remember Me",
                       style: TextStyle(
                           fontSize: 14,
                           fontFamily: "Gilroy Medium",
-                          color: BlackColor),
+                          color: AppColors.blackColor),
                     ),
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 50),
                   child: GestureDetector(
-                      onTap: () {
-                        print("saad");
-                        // if ((_formKey.currentState?.validate() ?? false)) {
+                    onTap: () {
+                      if ((_formKey.currentState?.validate() ?? false)) {
                         login(Mobile.text, password.text);
-                        // }
-                      },
-                      child: Container(
-                          height: 50,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(18),
-                              color: appcolor),
-                          child: Center(
-                              child: Text("Login",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: WhiteColor,
-                                      fontFamily: "Gilroy Bold"))))),
+                      }
+                    },
+                    child: Container(
+                      height: 50,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: AppColors.appColor,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: AppColors.whiteColor,
+                              fontFamily: "Gilroy Bold"),
+                        ),
+                      ),
+                    ),
+                  ),
                 )
               ],
             ),
@@ -143,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget passwordtextfield() {
+  Widget passwordTextfield() {
     return Container(
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
       child: TextFormField(
@@ -155,9 +166,9 @@ class _LoginScreenState extends State<LoginScreen> {
           }
           return null;
         },
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 16,
-          color: BlackColor,
+          color: AppColors.blackColor,
         ),
         decoration: InputDecoration(
           suffixIcon: InkWell(
@@ -165,19 +176,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 _toggle();
               },
               child: !_obscureText
-                  ? Icon(Icons.visibility, color: Darkblue)
-                  : Icon(Icons.visibility_off, color: greycolor)),
+                  ? const Icon(Icons.visibility, color: AppColors.darkblue)
+                  : const Icon(Icons.visibility_off,
+                      color: AppColors.greyColor)),
           labelText: "Password",
           labelStyle: const TextStyle(color: Colors.grey, fontSize: 14),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Darkblue),
+            borderSide: const BorderSide(color: AppColors.darkblue),
             borderRadius: BorderRadius.circular(15),
           ),
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15))),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Greycolor.withOpacity(0.6),
+                color: AppColors.greenColor.withOpacity(0.6),
               ),
               borderRadius: BorderRadius.circular(15)),
         ),
@@ -187,23 +199,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   login(String email, String password) async {
     try {
-      print("test 1");
-      Map map = {"username": email, "password": password};
+      Map map = {"email": email, "password": password};
       Uri uri = Uri.parse(AppUrl.login);
-      print("test 2");
 
       var response = await http.post(uri, body: jsonEncode(map));
-      print("test 3");
-      print(response.body);
+
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
-        print("test 4");
 
         pagerought = result["Result"];
         save("currency", result["currency"]);
         save("AdminLogin", result["AdminLogin"]);
-        print("*********************${result}");
-        print("*********************${getData.read("AdminLogin")}");
 
         if (pagerought == "true") {
           AuthService().singUpAndStore(
@@ -215,7 +221,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ApiWrapper.showToastMessage(result["ResponseMsg"]);
         }
       }
-      // update();
     } catch (e) {
       print(e.toString());
     }

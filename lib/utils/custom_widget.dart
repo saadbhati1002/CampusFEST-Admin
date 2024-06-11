@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:goevent_admin/utils/Colors.dart';
+import 'package:event/utils/Colors.dart';
 
 textfield(
     {String? text,
     suffix,
-    Color? labelcolor,
-    Function()? ontap,
-    feildcolor,
+    Color? labelColor,
+    Function()? onTap,
+    fieldColor,
     double? Width,
     Height,
     TextEditingController? controller,
@@ -18,14 +18,17 @@ textfield(
       height: Height,
       width: Width,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: WhiteColor),
+          borderRadius: BorderRadius.circular(15), color: AppColors.whiteColor),
       child: TextFormField(
-        onTap: ontap,
+        onTap: onTap,
         controller: controller,
         decoration: InputDecoration(
           labelText: text,
-          labelStyle: TextStyle(
-              color: greycolor, fontFamily: "Gilroy Medium", fontSize: 14),
+          labelStyle: const TextStyle(
+            color: AppColors.greyColor,
+            fontFamily: "Gilroy Medium",
+            fontSize: 14,
+          ),
           suffixIcon: Padding(
             padding: const EdgeInsets.all(6),
             child: suffix,
@@ -33,12 +36,12 @@ textfield(
           border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(15))),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Darkblue),
+            borderSide: const BorderSide(color: AppColors.darkblue),
             borderRadius: BorderRadius.circular(15),
           ),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: Greycolor.withOpacity(0.6),
+                color: AppColors.greyColor.withOpacity(0.6),
               ),
               borderRadius: BorderRadius.circular(15)),
         ),
@@ -46,33 +49,35 @@ textfield(
       ));
 }
 
-CustomAppbar(
-    {String? centertext,
+CustomAppBar(
+    {String? centerText,
     bool? center,
-    Widget? backbutton,
-    IconData? actionicon,
-    Function()? onclick,
-    double? redi}) {
+    Widget? backButton,
+    IconData? actionIcon,
+    Function()? onClick,
+    double? radius}) {
   return AppBar(
     elevation: 0,
-    backgroundColor: WhiteColor,
+    backgroundColor: AppColors.whiteColor,
     centerTitle: center,
-    title: Text(centertext!,
-        style: TextStyle(
-            fontSize: 18, color: BlackColor, fontFamily: "Gilroy Bold")),
+    title: Text(centerText!,
+        style: const TextStyle(
+            fontSize: 18,
+            color: AppColors.blackColor,
+            fontFamily: "Gilroy Bold")),
     leading:
-        Transform.translate(offset: const Offset(-6, 0), child: backbutton),
+        Transform.translate(offset: const Offset(-6, 0), child: backButton),
     actions: [
       Padding(
         padding: const EdgeInsets.only(right: 8),
         child: InkWell(
-          onTap: onclick,
+          onTap: onClick,
           child: CircleAvatar(
-            radius: redi,
-            backgroundColor: greycolor.withOpacity(0.4),
+            radius: radius,
+            backgroundColor: AppColors.greyColor.withOpacity(0.4),
             child: Icon(
-              actionicon,
-              color: BlackColor,
+              actionIcon,
+              color: AppColors.blackColor,
             ),
           ),
         ),

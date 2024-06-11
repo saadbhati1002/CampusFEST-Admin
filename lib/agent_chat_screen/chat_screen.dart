@@ -18,8 +18,8 @@ class ChatPage extends StatefulWidget {
   final String resiverUseremail;
   final String proPic;
 
-  const ChatPage({Key? key,
-
+  const ChatPage({
+    Key? key,
     required this.resiverUserId,
     required this.resiverUseremail,
     required this.proPic,
@@ -48,8 +48,8 @@ class _ChatPageState extends State<ChatPage> {
         fields = value.data();
 
         if (fields["isOnline"] == false) {
-          sendPushMessage(
-              controller.text, getData.read("AdminLogin")["username"], fmctoken);
+          sendPushMessage(controller.text,
+              getData.read("AdminLogin")["username"], fmctoken);
         } else {
           print("user online");
         }
@@ -67,7 +67,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   String fmctoken = "";
-  Future<dynamic> isMeassageAvalable(String uid) async {
+  Future<dynamic> isMessageAvailable(String uid) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('users');
     collectionReference.doc(uid).get().then((value) {
@@ -84,17 +84,17 @@ class _ChatPageState extends State<ChatPage> {
   void initState() {
     super.initState();
 
-    isMeassageAvalable(widget.resiverUserId);
+    isMessageAvailable(widget.resiverUserId);
     if (getData.read("AdminLogin")["id"] == null) {
     } else {
-      isUserOnlie(getData.read("AdminLogin")["id"], true);
+      isUserOnline(getData.read("AdminLogin")["id"], true);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    isUserOnlie(getData.read("AdminLogin")["id"], false);
+    isUserOnline(getData.read("AdminLogin")["id"], false);
   }
 
   void _scrollDown() {
@@ -156,14 +156,22 @@ class _ChatPageState extends State<ChatPage> {
                           backgroundImage: AssetImage(
                             "assets/images/profile-default.png",
                           ))
-                      :  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.network("http://15.207.11.52/event_vibes/${widget.proPic}",fit: BoxFit.fill,height: 30,
-                      width: 30,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.asset("assets/images-removebg-preview.png",height: 30,width: 30,);
-                      },),
-                  ),
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: Image.network(
+                            "http://15.207.11.52/event_vibes/${widget.proPic}",
+                            fit: BoxFit.fill,
+                            height: 30,
+                            width: 30,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                "assets/images-removebg-preview.png",
+                                height: 30,
+                                width: 30,
+                              );
+                            },
+                          ),
+                        ),
                   const SizedBox(
                     width: 10,
                   ),
@@ -252,7 +260,7 @@ class _ChatPageState extends State<ChatPage> {
 
             ChatBubble(
               chatColor: (data["senderid"] == getData.read("AdminLogin")["id"])
-                  ? blueColor
+                  ? AppColors.blueColor
                   : Colors.grey.shade100,
               textColor: (data["senderid"] == getData.read("AdminLogin")["id"])
                   ? Colors.white
@@ -262,16 +270,15 @@ class _ChatPageState extends State<ChatPage> {
                   ? false
                   : true,
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(
+              height: 5,
+            ),
             Text(
                 DateFormat('hh:mm a')
                     .format(DateTime.fromMicrosecondsSinceEpoch(
                         data["timestamp"].microsecondsSinceEpoch))
                     .toString(),
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Colors.black
-                )),
+                style: const TextStyle(fontSize: 10, color: Colors.black)),
           ],
         ),
       ),
@@ -303,16 +310,16 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   hintText: "Say Something..",
                   border: OutlineInputBorder(
-                      borderSide:  const BorderSide(color: Color(0xffF0F0F0)),
+                      borderSide: const BorderSide(color: Color(0xffF0F0F0)),
                       borderRadius: BorderRadius.circular(12)),
                   enabledBorder: OutlineInputBorder(
-                      borderSide:  const BorderSide(color: Color(0xffF0F0F0)),
+                      borderSide: const BorderSide(color: Color(0xffF0F0F0)),
                       borderRadius: BorderRadius.circular(12)),
                   focusedBorder: OutlineInputBorder(
-                      borderSide:  const BorderSide(color: Colors.blue),
+                      borderSide: const BorderSide(color: Colors.blue),
                       borderRadius: BorderRadius.circular(12)),
                   disabledBorder: OutlineInputBorder(
-                      borderSide:  const BorderSide(color: Color(0xffF0F0F0)),
+                      borderSide: const BorderSide(color: Color(0xffF0F0F0)),
                       borderRadius: BorderRadius.circular(12))),
             ),
           ),
@@ -376,7 +383,7 @@ void requestPermission() async {
   }
 }
 
-Future<dynamic> isUserOnlie(String uid, bool isonline) async {
+Future<dynamic> isUserOnline(String uid, bool isonline) async {
   CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('users');
   collectionReference.doc(uid).update({"isOnline": isonline});
