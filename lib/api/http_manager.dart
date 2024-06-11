@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:event/login.dart';
+import 'package:event/screens/auth/login/login.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/view_utlity.dart';
 import 'package:get/get.dart' as navigation;

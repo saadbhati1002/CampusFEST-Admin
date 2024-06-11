@@ -11,7 +11,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:event/home_page.dart';
 import 'package:event/api/Data_save.dart';
 
-import 'package:event/login.dart';
+import 'package:event/screens/auth/login/login.dart';
 
 void main() async {
   await GetStorage.init();
