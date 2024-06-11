@@ -2,13 +2,13 @@
 
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event/utils/constant.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../api/Data_save.dart';
-import '../api/confrigation.dart';
 import '../utils/Colors.dart';
 import 'chat_bubble.dart';
 import 'chat_service.dart';
@@ -234,12 +234,12 @@ class _ChatPageState extends State<ChatPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollDown();
     });
-    var alingmentt = (data["senderid"] == getData.read("AdminLogin")["id"])
+    var alignment = (data["senderid"] == getData.read("AdminLogin")["id"])
         ? Alignment.centerRight
         : Alignment.centerLeft;
 
     return Container(
-      alignment: alingmentt,
+      alignment: alignment,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -331,10 +331,10 @@ class _ChatPageState extends State<ChatPage> {
   void sendPushMessage(String body, String title, String token) async {
     try {
       await http.post(
-        Uri.parse(AppUrl.notificationUrl),
+        Uri.parse(AppConstant.notificationUrl),
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'key=${AppUrl.firebaseKey}',
+          'Authorization': 'key=${AppConstant.firebaseKey}',
         },
         body: jsonEncode(
           <String, dynamic>{

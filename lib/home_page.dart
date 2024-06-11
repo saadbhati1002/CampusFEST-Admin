@@ -2,10 +2,11 @@
 
 import 'dart:io';
 import 'package:barcode_scan2/barcode_scan2.dart';
+import 'package:event/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:event/Ticket_Details.dart';
-import 'package:event/api/Api_werper.dart';
+import 'package:event/ticket_details.dart';
+
 import 'package:event/api/Data_save.dart';
 import 'package:event/login.dart';
 import 'package:event/utils/Colors.dart';
@@ -135,7 +136,7 @@ class _ScanPageState extends State<ScanPage> {
                       () => TicketDetailPage(ticketData: qCodeResult),
                     );
                   } else {
-                    ApiWrapper.showToastMessage("Please Scan Qr Code");
+                    AppConstant.showToastMessage("Please Scan Qr Code");
                   }
                   // qCodeResult = "";
                 },

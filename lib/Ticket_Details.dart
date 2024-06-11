@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:event/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:event/home_page.dart';
-import 'package:event/api/Api_werper.dart';
 import 'package:event/api/Data_save.dart';
 import 'package:event/api/confrigation.dart';
 import 'package:event/model/ticket_info.dart';
@@ -32,7 +32,6 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
   bool isLoading = false;
   TicketInfo? ticketInfo;
   List<TicketInfo> tickets = [];
-  var resultTicket;
 
   String jsonString = "";
   String datastore = "";
@@ -55,20 +54,19 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
         var now = DateTime.now();
         var formatter = DateFormat('yyyy-MM-dd');
         formattedDate = formatter.format(now);
-        print("+++++++++++++++++++++++++++++++$formattedDate");
       });
 
       super.initState();
     } on FormatException catch (e) {
-      print('The provided string is not valid JSON');
-      ApiWrapper.showToastMessage("Invalid QRcode");
+      AppConstant.showToastMessage("Invalid QRcode");
+      debugPrint(e.toString());
       Get.back();
     }
   }
 
   blankResponse() {
     setState(() {
-      if (ticketData == null && ticketData.isEmpty) {
+      if (ticketData.isEmpty) {
         Get.back();
       } else {}
     });
@@ -94,7 +92,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
     Future.delayed(const Duration(seconds: 0), () {
       setState(() {});
     });
-    // notifire = Provider.of<ColorNotifire>(context, listen: true);
+
     return Scaffold(
       bottomNavigationBar: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -103,7 +101,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                   onTap: () {
                     setState(() {
                       tapped = tapped;
-                      VerifyTicket();
+                      verifyTicket();
                     });
                   },
                   child: Container(
@@ -128,7 +126,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                   onTap: () {
                     setState(() {
                       tapped = !tapped;
-                      VerifyTicket();
+                      verifyTicket();
                     });
                   },
                   child: Container(
@@ -231,9 +229,9 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                                           ticketUserRow(
                                               title: "Tax",
                                               subtitle:
-                                                  "${datastore}${ticketData["ticket_tax"]}"),
+                                                  "$datastore${ticketData["ticket_tax"]}"),
                                           SizedBox(height: Get.height * 0.014),
-                                          ticketData != null
+                                          ticketData.isNotEmpty
                                               ? ticketData["ticket_wall_amt"] !=
                                                       "0"
                                                   ? Column(
@@ -241,7 +239,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                                                         ticketUserRow(
                                                             title: "Wallet",
                                                             subtitle:
-                                                                "${datastore}${ticketData["ticket_wall_amt"]}"),
+                                                                "$datastore${ticketData["ticket_wall_amt"]}"),
                                                         SizedBox(
                                                             height: Get.height *
                                                                 0.018),
@@ -249,7 +247,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                                                     )
                                                   : const SizedBox()
                                               : const SizedBox(),
-                                          ticketData != null
+                                          ticketData.isNotEmpty
                                               ? ticketData[
                                                           "ticket_total_amt"] !=
                                                       "0"
@@ -266,7 +264,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                                                     )
                                                   : const SizedBox()
                                               : const SizedBox(),
-                                          ticketData != null
+                                          ticketData.isNotEmpty
                                               ? ticketData[
                                                           "ticket_transaction_id"] !=
                                                       "0"
@@ -350,7 +348,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
   }
 
   ticketUserCopy(
-      {String? title, subtitle, Widget? textCopy, Function()? OnTap}) {
+      {String? title, subtitle, Widget? textCopy, Function()? onTap}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -364,7 +362,7 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
                   color: Colors.grey)),
         ),
         InkWell(
-          onTap: OnTap,
+          onTap: onTap,
           child: Row(
             children: [
               Ink(
@@ -408,30 +406,28 @@ class _TicketDetailPageState extends State<TicketDetailPage> {
     );
   }
 
-  VerifyTicket() async {
+  verifyTicket() async {
     try {
       Map map = {
         "uid": ticketData["uid"],
         "tic_id": ticketData["ticket_id"],
         "ve_date": formattedDate
       };
-      print("+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
-          "${ticketData["uid"]}--------------${ticketData["ticket_id"]}++++++++++++++++++${formattedDate}");
+
       Uri uri = Uri.parse(AppUrl.verify);
       var response = await http.post(uri, body: jsonEncode(map));
       if (response.statusCode == 200) {
         var result = jsonDecode(response.body);
         verify = result["Result"];
-        print("*********************${verify}");
 
         if (verify == "true") {
-          ApiWrapper.showToastMessage(result["ResponseMsg"]);
+          AppConstant.showToastMessage(result["ResponseMsg"]);
         } else {
-          ApiWrapper.showToastMessage(result["ResponseMsg"]);
+          AppConstant.showToastMessage(result["ResponseMsg"]);
         }
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

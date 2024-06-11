@@ -1,11 +1,11 @@
 // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../api/Data_save.dart';
-import '../api/confrigation.dart';
 import 'chat_screen.dart';
 import 'chat_service.dart';
 
@@ -62,16 +62,30 @@ class _ChatListState extends State<ChatList> {
                     isDense: true,
                     hintStyle: const TextStyle(color: Colors.black),
                     hintText: "Search..",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffF0F0F0))),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffF0F0F0))),
-                    focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Colors.blue)),
-                    disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffF0F0F0))),
-                    errorBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffF0F0F0)))),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xffF0F0F0))),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xffF0F0F0))),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.blue)),
+                    disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Color(0xffF0F0F0))),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Color(0xffF0F0F0)))),
                 onChanged: (s) {
                   _searchIndexList = [];
                   for (int i = 0; i < searchiteams.length; i++) {
-                    if (searchiteams[i]["name"].toLowerCase().contains(s.toLowerCase())) {
-                      final ids = searchiteams.map<String>((e) => e['uid']!).toSet();
+                    if (searchiteams[i]["name"]
+                        .toLowerCase()
+                        .contains(s.toLowerCase())) {
+                      final ids =
+                          searchiteams.map<String>((e) => e['uid']!).toSet();
 
                       searchiteams.retainWhere((Map x) {
                         return ids.remove(x['uid']);
@@ -114,9 +128,7 @@ class _ChatListState extends State<ChatList> {
                             },
                             subtitle: Text(searchiteams[result]["message"],
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black
-                                )),
+                                    fontSize: 14, color: Colors.black)),
                             trailing: Text(
                                 DateFormat('hh:mm a')
                                     .format(DateTime.fromMicrosecondsSinceEpoch(
@@ -124,9 +136,7 @@ class _ChatListState extends State<ChatList> {
                                             .microsecondsSinceEpoch))
                                     .toString(),
                                 style: const TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.black
-                                )),
+                                    fontSize: 10, color: Colors.black)),
                             leading: imageisemty
                                 ? const CircleAvatar(
                                     backgroundColor: Colors.transparent,
@@ -138,11 +148,10 @@ class _ChatListState extends State<ChatList> {
                                     backgroundColor: Colors.transparent,
                                     radius: 25,
                                     backgroundImage: NetworkImage(
-                                        "${AppUrl.baseUrl}${searchiteams[result]["image"]}")),
+                                        "${AppConstant.baseUrl}${searchiteams[result]["image"]}")),
                             title: Text(
                               searchiteams[result]["name"].toString(),
-                              style:
-                                  const TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                             ),
                           );
                         },
@@ -275,33 +284,35 @@ class _ChatListState extends State<ChatList> {
                   "assets/images-removebg-preview.png",
                 ))
             : ClipRRect(
-             borderRadius: BorderRadius.circular(30),
-              child: Image.network("http://15.207.11.52/event_vibes/$proPic",fit: BoxFit.fill,height: 40,
-                width: 40,
-                errorBuilder: (context, error, stackTrace) {
-                return Image.asset("assets/images-removebg-preview.png",height: 40,width: 40,);
-              },),
-            ),
+                borderRadius: BorderRadius.circular(30),
+                child: Image.network(
+                  "http://15.207.11.52/event_vibes/$proPic",
+                  fit: BoxFit.fill,
+                  height: 40,
+                  width: 40,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset(
+                      "assets/images-removebg-preview.png",
+                      height: 40,
+                      width: 40,
+                    );
+                  },
+                ),
+              ),
         title: Text(
           email,
           style: const TextStyle(color: Colors.black),
         ),
         subtitle: Text(
           data["message"],
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black
-          ),
+          style: const TextStyle(fontSize: 14, color: Colors.black),
         ),
         trailing: Text(
             DateFormat('hh:mm a')
                 .format(DateTime.fromMicrosecondsSinceEpoch(
                     data["timestamp"].microsecondsSinceEpoch))
                 .toString(),
-            style: const TextStyle(
-              fontSize: 10,
-              color: Colors.black
-            )));
+            style: const TextStyle(fontSize: 10, color: Colors.black)));
   }
 
   Future<dynamic> isMeassageAvalable(String chatroom) async {
