@@ -10,7 +10,7 @@ import 'package:event/ticket_details.dart';
 import 'package:event/api/Data_save.dart';
 import 'package:event/screens/auth/login/login.dart';
 import 'package:event/utils/Colors.dart';
-import 'agent_chat_screen/chats_list.dart';
+import 'screens/agent_chat_screen/chats_list.dart';
 
 Map qrCodeResult = {};
 String qCodeResult = "";

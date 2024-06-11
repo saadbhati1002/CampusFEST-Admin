@@ -5,7 +5,7 @@ import 'package:event/utils/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import '../api/Data_save.dart';
+import '../../api/Data_save.dart';
 import 'chat_screen.dart';
 import 'chat_service.dart';
 

@@ -7,46 +7,57 @@ import 'package:event/utils/Colors.dart';
 textfield(
     {String? text,
     suffix,
+    prefix,
     Color? labelColor,
     Function()? onTap,
     fieldColor,
     double? Width,
     Height,
     TextEditingController? controller,
-    String? Function(String?)? validator}) {
+    String? Function(String?)? validator,
+    bool? obstacle,
+    TextInputType? keyboardType}) {
   return Container(
-      height: Height,
-      width: Width,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15), color: AppColors.whiteColor),
-      child: TextFormField(
-        onTap: onTap,
-        controller: controller,
-        decoration: InputDecoration(
-          labelText: text,
-          labelStyle: const TextStyle(
-            color: AppColors.greyColor,
-            fontFamily: "Gilroy Medium",
-            fontSize: 14,
-          ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(6),
-            child: suffix,
-          ),
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15))),
-          focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: AppColors.darkblue),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.greyColor.withOpacity(0.6),
-              ),
-              borderRadius: BorderRadius.circular(15)),
+    height: 47,
+    width: Width,
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15), color: AppColors.whiteColor),
+    child: TextFormField(
+      keyboardType: keyboardType ?? TextInputType.text,
+      obscureText: obstacle ?? false,
+      onTap: onTap,
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: text,
+        labelStyle: const TextStyle(
+          color: AppColors.greyColor,
+          fontFamily: "Gilroy Medium",
+          fontSize: 14,
         ),
-        validator: validator,
-      ));
+        suffixIcon: Padding(
+          padding: const EdgeInsets.all(6),
+          child: suffix,
+        ),
+        prefixIcon: prefix ??
+            Padding(
+              padding: const EdgeInsets.all(6),
+              child: prefix,
+            ),
+        border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(15))),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: AppColors.darkblue),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AppColors.greyColor.withOpacity(0.6),
+            ),
+            borderRadius: BorderRadius.circular(15)),
+      ),
+      validator: validator,
+    ),
+  );
 }
 
 CustomAppBar(
