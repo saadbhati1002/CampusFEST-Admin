@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_final_fields, body_might_complete_normally_nullable, unnecessary_string_interpolations, unnecessary_brace_in_string_interps, deprecated_member_use, avoid_print
 
+import 'package:event/api/repository/auth.dart';
+import 'package:event/model/common/common_model.dart';
 import 'package:event/screens/auth/login/login.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -371,7 +373,7 @@ class _SignupState extends State<Signup> {
   }
 
   //
-  authSignUp() {
+  authSignUp() async {
     if (name.text.isEmpty) {
       AppConstant.showToastMessage("Please Enter Your Name");
       return;
@@ -380,11 +382,11 @@ class _SignupState extends State<Signup> {
       AppConstant.showToastMessage("Please Enter Your Mobile Number");
       return;
     }
-    if (number.toString().length != 10) {
-      AppConstant.showToastMessage("Please Provide A Valid Mobile Number");
+    // if (number.toString().length != 10) {
+    //   AppConstant.showToastMessage("Please Provide a Valid Mobile Number");
 
-      return;
-    }
+    //   return;
+    // }
     if (email.text.isEmpty) {
       AppConstant.showToastMessage("Please Enter Your Email");
       return;
@@ -404,7 +406,20 @@ class _SignupState extends State<Signup> {
       return;
     }
     FocusScope.of(context).requestFocus(FocusNode());
-
+    try {
+      setState(() {});
+      CommonRes response = await AuthRepository().mobileEmailCheckApiCall(
+          email: email.text.trim(), mobile: number.text.trim());
+      if (response.responseCode == "200") {
+        verifyPhone("${_selectedCountryCode}" "${number.text}");
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {});
+    }
     // var mcheck = {"mobile": number.text, "email": email.text.trim()};
 
     // if (name.text.isNotEmpty &&

@@ -43,9 +43,9 @@ class HTTPManager {
       headers: {
         'Content-Type': 'application/json',
         'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab',
-        "Authorization": AppConstant.bearerToken != "null"
-            ? "Bearer ${AppConstant.bearerToken}"
-            : "",
+        // "Authorization": AppConstant.bearerToken != "null"
+        //     ? "Bearer ${AppConstant.bearerToken}"
+        //     : "",
       },
     );
 

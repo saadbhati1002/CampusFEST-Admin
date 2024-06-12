@@ -5,4 +5,10 @@ class AuthRepository {
     final params = {"email": email, "password": password};
     return await AuthNetwork.loginUser(params);
   }
+
+  Future<dynamic> mobileEmailCheckApiCall(
+      {String? email, String? mobile}) async {
+    final params = {"mobile": mobile, "email": email};
+    return await AuthNetwork.mobileEmailCheck(params);
+  }
 }
