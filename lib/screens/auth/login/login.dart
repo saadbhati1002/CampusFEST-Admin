@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:event/api/repository/auth.dart';
 import 'package:event/model/auth/login_model.dart';
+import 'package:event/screens/auth/forgot_password/forgot_password_screen.dart';
 import 'package:event/screens/auth/register/signup.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/show_progress_bar.dart';
@@ -124,8 +125,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Spacer(),
                       GestureDetector(
                         onTap: () {
-                          // Get.to(() => const Resetpassword(),
-                          //     duration: Duration.zero);
+                          Get.to(() => const ForgotPasswordScreen(),
+                              duration: Duration.zero);
                         },
                         child: Container(
                           color: Colors.transparent,

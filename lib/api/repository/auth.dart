@@ -11,4 +11,11 @@ class AuthRepository {
     final params = {"mobile": mobile, "email": email};
     return await AuthNetwork.mobileEmailCheck(params);
   }
+
+  Future<dynamic> mobileCheckApiCall({String? mobile}) async {
+    final params = {
+      "mobile": mobile,
+    };
+    return await AuthNetwork.mobileCheck(params);
+  }
 }
