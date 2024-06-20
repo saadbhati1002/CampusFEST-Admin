@@ -6,6 +6,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
   firebase_auth
   firebase_core
+  geolocator_windows
+  permission_handler_windows
   share_plus
   smart_auth
   url_launcher_windows

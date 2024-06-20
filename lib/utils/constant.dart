@@ -1,12 +1,15 @@
 import 'package:event/utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:event/model/auth/login_model.dart';
 
 class AppConstant {
   static const String baseUrl = 'https://app.campusfest.co/eapi/';
   static const String notificationUrl = "https://fcm.googleapis.com/fcm/send";
+  static LatLng locationLatLong = const LatLng(28.7041, 77.1025);
+  static String currentAddress = "";
   static const String firebaseKey =
       "**********************************************************";
   static UserData? userData;

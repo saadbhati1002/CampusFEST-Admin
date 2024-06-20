@@ -3,11 +3,11 @@ import 'package:event/api/repository/auth.dart';
 import 'package:event/model/auth/login_model.dart';
 import 'package:event/screens/auth/forgot_password/forgot_password_screen.dart';
 import 'package:event/screens/auth/register/signup.dart';
+import 'package:event/screens/dashboard/dashboard_screen.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:event/home_page.dart';
 import 'package:event/screens/agent_chat_screen/auth_service.dart';
 
 import 'package:event/api/Data_save.dart';
@@ -277,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
             email: response.adminLogin!.username!,
             uid: response.adminLogin!.id!,
             proPicPath: "null");
-        Get.to(() => const ScanPage());
+        Get.to(() => const DashBoardScreen());
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }
