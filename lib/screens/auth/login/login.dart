@@ -269,6 +269,8 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginRes response = await AuthRepository().userLoginApiCall(
           email: mobile.text.trim(), password: password.text.trim());
       if (response.responseCode == "200") {
+        await AppConstant.userDetailSaved(json.encode(response));
+        AppConstant.userData = response.adminLogin;
         save("currency", response.currency);
         save("AdminLogin", jsonEncode(response.adminLogin));
         AuthService().singUpAndStore(

@@ -2,13 +2,14 @@ import 'package:event/utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:event/model/auth/login_model.dart';
 
 class AppConstant {
   static const String baseUrl = 'https://app.campusfest.co/eapi/';
   static const String notificationUrl = "https://fcm.googleapis.com/fcm/send";
   static const String firebaseKey =
       "**********************************************************";
-  // static UserData? userData;
+  static UserData? userData;
   static String bearerToken = "null";
 
   static userDetailSaved(String userDetail) async {

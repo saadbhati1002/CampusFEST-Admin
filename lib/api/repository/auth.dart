@@ -6,6 +6,10 @@ class AuthRepository {
     return await AuthNetwork.loginUser(params);
   }
 
+  Future<dynamic> userRegisterApiCall({Map? params}) async {
+    return await AuthNetwork.registerUser(params);
+  }
+
   Future<dynamic> mobileEmailCheckApiCall(
       {String? email, String? mobile}) async {
     final params = {"mobile": mobile, "email": email};
@@ -17,5 +21,11 @@ class AuthRepository {
       "mobile": mobile,
     };
     return await AuthNetwork.mobileCheck(params);
+  }
+
+  Future<dynamic> resetPasswordApiCall(
+      {String? mobile, String? password}) async {
+    final params = {"mobile": mobile, "password": password};
+    return await AuthNetwork.resetPassword(params);
   }
 }

@@ -18,7 +18,7 @@ textfield(
     bool? obstacle,
     TextInputType? keyboardType}) {
   return Container(
-    height: 47,
+    height: 55,
     width: Width,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15), color: AppColors.whiteColor),

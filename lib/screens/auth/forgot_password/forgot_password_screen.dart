@@ -1,5 +1,6 @@
 import 'package:event/api/repository/auth.dart';
 import 'package:event/model/common/common_model.dart';
+import 'package:event/screens/auth/verification/verification_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
@@ -50,8 +51,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             setState(() {});
 
             isLoading = false;
-            // Get.to(() => Verification(
-            //     verID: verificationId, number: number.text, type: "Reset"));
+            Get.to(() => VerificationScreen(
+                verID: verificationId,
+                params: {"mobile": number.text.toString()},
+                type: "Reset"));
           },
           codeAutoRetrievalTimeout: (String verificationId) {},
         );
@@ -70,7 +73,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkMode,
+      backgroundColor: AppColors.whiteColor,
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -84,8 +87,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: const Icon(Icons.arrow_back,
-                          color: AppColors.whiteColor),
+                      child: Container(
+                        color: AppColors.appColor,
+                        child: const Icon(
+                          Icons.arrow_back,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -100,7 +108,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Gilroy Medium',
-                          color: AppColors.whiteColor,
+                          color: AppColors.blackColor,
                         ),
                       ),
                     ),
@@ -119,7 +127,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Gilroy Medium',
-                              color: AppColors.whiteColor,
+                              color: AppColors.blackColor,
                             ),
                           ),
                           SizedBox(
@@ -129,7 +137,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'Gilroy Medium',
-                              color: AppColors.whiteColor,
+                              color: AppColors.blackColor,
                             ),
                           ),
                         ],
