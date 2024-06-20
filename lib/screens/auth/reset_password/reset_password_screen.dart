@@ -1,4 +1,4 @@
-import 'package:event/api/repository/auth.dart';
+import 'package:event/api/repository/auth/auth.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/screens/auth/login/login.dart';
 import 'package:event/utils/Colors.dart';

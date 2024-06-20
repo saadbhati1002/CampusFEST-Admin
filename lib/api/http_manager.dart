@@ -180,9 +180,7 @@ class HTTPManager {
     Options? options,
   }) async {
     var optionsMain = Options(headers: {
-      "Authorization": AppConstant.bearerToken != "null"
-          ? "Bearer ${AppConstant.bearerToken}"
-          : "",
+      "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
       "Accept": 'application/json',
       'Content-Type': 'application/json',
       'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab'

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:event/api/Data_save.dart';
-import 'package:event/api/repository/auth.dart';
+import 'package:event/api/repository/auth/auth.dart';
 import 'package:event/model/auth/login_model.dart';
 import 'package:event/screens/agent_chat_screen/auth_service.dart';
 import 'package:event/screens/auth/reset_password/reset_password_screen.dart';

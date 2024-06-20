@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_final_fields, body_might_complete_normally_nullable, unnecessary_string_interpolations, unnecessary_brace_in_string_interps, deprecated_member_use, avoid_print
 
-import 'package:event/api/repository/auth.dart';
+import 'package:event/api/repository/auth/auth.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/screens/auth/login/login.dart';
 import 'package:event/screens/auth/verification/verification_screen.dart';

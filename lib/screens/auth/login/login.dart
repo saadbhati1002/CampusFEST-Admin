@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:event/api/repository/auth.dart';
+import 'package:event/api/repository/auth/auth.dart';
 import 'package:event/model/auth/login_model.dart';
 import 'package:event/screens/auth/forgot_password/forgot_password_screen.dart';
 import 'package:event/screens/auth/register/signup.dart';
