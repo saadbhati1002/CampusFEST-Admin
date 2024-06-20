@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'dart:convert';
+import 'package:event/screens/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -8,10 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:event/home_page.dart';
-import 'package:event/api/Data_save.dart';
-
-import 'package:event/screens/auth/login/login.dart';
 
 void main() async {
   await GetStorage.init();
@@ -35,11 +32,7 @@ class BoardingScreen extends StatelessWidget {
     return GetMaterialApp(
         title: "CumpusFEST Admin",
         debugShowCheckedModeBanner: false,
-        home: getData.read("Firstuser") != true
-            ? getData.read("Remember") != true
-                ? LoginScreen()
-                : ScanPage()
-            : null);
+        home: SplashScreen());
   }
 }
 
