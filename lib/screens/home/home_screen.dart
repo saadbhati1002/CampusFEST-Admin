@@ -2,6 +2,7 @@ import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/widget/app_bar_main.dart';
+import 'package:event/widget/custom_drawer.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   bool isLoading = false;
   DashboardData? dashboardData;
   @override
@@ -43,9 +46,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: appBarMain(
         context: context,
+        onTap: () {
+          _key.currentState!.openDrawer();
+        },
       ),
+      drawer: const CustomDrawer(),
       backgroundColor: AppColors.bgColor,
       body: Stack(
         children: [
