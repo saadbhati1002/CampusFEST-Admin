@@ -113,7 +113,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Container(
                 color: Colors.transparent,
                 height: MediaQuery.of(context).size.height / 2,
-                child: Image.asset("image/get_event.png"),
+                child: Image.asset("assets/get_event.png"),
               ),
             ],
           ),
