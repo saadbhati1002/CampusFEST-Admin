@@ -61,7 +61,8 @@ dependencies:
   geolocator:
   geocoding: ^2.0.5
   mapbox_search:
-
+  shimmer: ^3.0.0
+  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
