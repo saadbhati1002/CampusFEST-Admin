@@ -82,14 +82,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                      title: "Total User",
-                      count: dashboardData?.totalUsers ?? "0",
-                      backgroundColor: const Color(0xFF325163),
-                      textColor: AppColors.whiteColor,
-                      image: "assets/user.png",
-                      onTap: () {
-                        Get.to(() => const UserListScreen());
-                      }),
+                    title: "Total User",
+                    count: dashboardData?.totalUsers ?? "0",
+                    backgroundColor: const Color(0xFF325163),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/user.png",
+                    onTap: () async {
+                      var response = await Get.to(() => const UserListScreen());
+                      if (response != null) {
+                        dashboardData?.totalUsers = response;
+                        setState(() {});
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
                   ),

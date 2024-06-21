@@ -207,9 +207,7 @@ class HTTPManager {
   Future<dynamic> patch(
       {String? url, data, Options? options, BuildContext? context}) async {
     var optionsMain = Options(headers: {
-      "Authorization": AppConstant.bearerToken != "null"
-          ? "Bearer ${AppConstant.bearerToken}"
-          : "",
+      "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
       "Accept": 'application/json',
       'Content-Type': 'application/json',
       'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab'
@@ -252,9 +250,7 @@ class HTTPManager {
     BuildContext? context,
   }) async {
     var optionsMain = Options(headers: {
-      "Authorization": AppConstant.bearerToken != "null"
-          ? "Bearer ${AppConstant.bearerToken}"
-          : "",
+      "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
       "Accept": 'application/json',
       'Content-Type': 'application/json',
       'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab'

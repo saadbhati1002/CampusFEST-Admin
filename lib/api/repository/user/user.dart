@@ -9,4 +9,8 @@ class UserRepository {
     final params = {"uid": userID, "status": status};
     return await UserNetwork.userStatusChange(params);
   }
+
+  Future<dynamic> userAccountDeleteApiCall({String? userID}) async {
+    return await UserNetwork.userAccountDelete(userID);
+  }
 }

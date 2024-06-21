@@ -47,39 +47,47 @@ class _UserListScreenState extends State<UserListScreen> {
     }
   }
 
+  Future<bool> _onBackPress() async {
+    Navigator.pop(context, usersList.length);
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      appBar: titleAppBar(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        title: "Users List",
-      ),
-      body: Stack(
-        children: [
-          !isLoading
-              ? ListView.builder(
-                  itemCount: usersList.length,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  itemBuilder: (context, index) {
-                    return userWidget(data: usersList[index], index: index);
-                  },
-                )
-              : ListView.builder(
-                  itemCount: 10,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-                  itemBuilder: (context, index) {
-                    return const CommonSkeleton();
-                  },
-                ),
-          isApiCallLoading ? const ShowProgressBar() : const SizedBox()
-        ],
+    return WillPopScope(
+      onWillPop: _onBackPress,
+      child: Scaffold(
+        backgroundColor: AppColors.bgColor,
+        appBar: titleAppBar(
+          onTap: () {
+            Navigator.pop(context, usersList.length);
+          },
+          title: "Users List",
+        ),
+        body: Stack(
+          children: [
+            !isLoading
+                ? ListView.builder(
+                    itemCount: usersList.length,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
+                    itemBuilder: (context, index) {
+                      return userWidget(data: usersList[index], index: index);
+                    },
+                  )
+                : ListView.builder(
+                    itemCount: 10,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                    itemBuilder: (context, index) {
+                      return const CommonSkeleton();
+                    },
+                  ),
+            isApiCallLoading ? const ShowProgressBar() : const SizedBox()
+          ],
+        ),
       ),
     );
   }
@@ -190,7 +198,9 @@ class _UserListScreenState extends State<UserListScreen> {
                       width: 10,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _userAccountDelete(index: index);
+                      },
                       child: const Icon(
                         Icons.delete,
                         color: AppColors.greyColor,
@@ -218,6 +228,28 @@ class _UserListScreenState extends State<UserListScreen> {
       if (response.responseCode == "200") {
         usersList[index].status =
             usersList[index].status == "Active" ? "Inactive" : "Active";
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isApiCallLoading = false;
+      });
+    }
+  }
+
+  Future _userAccountDelete({int? index}) async {
+    try {
+      setState(() {
+        isApiCallLoading = true;
+      });
+
+      CommonRes response = await UserRepository().userAccountDeleteApiCall(
+        userID: usersList[index!].id,
+      );
+      if (response.responseCode == "200") {
+        usersList.removeAt(index);
+        AppConstant.showToastMessage("Account deleted successfully");
       }
     } catch (e) {
       debugPrint(e.toString());
