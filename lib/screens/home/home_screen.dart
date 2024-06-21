@@ -1,10 +1,12 @@
 import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
+import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/widget/app_bar_main.dart';
 import 'package:event/widget/custom_drawer.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,12 +82,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                    title: "Total User",
-                    count: dashboardData?.totalUsers ?? "0",
-                    backgroundColor: const Color(0xFF325163),
-                    textColor: AppColors.whiteColor,
-                    image: "assets/user.png",
-                  ),
+                      title: "Total User",
+                      count: dashboardData?.totalUsers ?? "0",
+                      backgroundColor: const Color(0xFF325163),
+                      textColor: AppColors.whiteColor,
+                      image: "assets/user.png",
+                      onTap: () {
+                        Get.to(() => const UserListScreen());
+                      }),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
                   ),
@@ -199,63 +203,66 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget dashboardBox({
-    String? title,
-    dynamic count,
-    Color? backgroundColor,
-    Color? textColor,
-    String? image,
-  }) {
-    return Container(
-      height: MediaQuery.of(context).size.height * .15,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.whiteColor,
-              image: DecorationImage(
-                image: AssetImage(image!),
+  Widget dashboardBox(
+      {String? title,
+      dynamic count,
+      Color? backgroundColor,
+      Color? textColor,
+      String? image,
+      VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: MediaQuery.of(context).size.height * .15,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.whiteColor,
+                image: DecorationImage(
+                  image: AssetImage(image!),
+                ),
               ),
             ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                title!,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Gilroy Medium',
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  title!,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Gilroy Medium',
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                count.toString(),
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'Gilroy Medium',
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-            ],
-          ),
-        ],
+                Text(
+                  count.toString(),
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Gilroy Medium',
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

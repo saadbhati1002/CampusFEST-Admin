@@ -20,7 +20,7 @@ class CustomImageCircular extends StatelessWidget {
   Widget build(BuildContext context) {
     return (imagePath != null && imagePath!.isNotEmpty)
         ? CachedNetworkImage(
-            imageUrl: "${AppConstant.baseUrl}$imagePath",
+            imageUrl: "${AppConstant.imageUrl}$imagePath",
             imageBuilder: (context, imageProvider) {
               return Container(
                 height: height,

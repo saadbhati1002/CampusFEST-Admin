@@ -7,6 +7,7 @@ import 'package:event/model/auth/login_model.dart';
 
 class AppConstant {
   static const String baseUrl = 'https://app.campusfest.co/eapi/';
+  static const String imageUrl = 'https://app.campusfest.co/';
   static const String notificationUrl = "https://fcm.googleapis.com/fcm/send";
   static LatLng locationLatLong = const LatLng(28.7041, 77.1025);
   static String currentAddress = "";

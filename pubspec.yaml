@@ -63,6 +63,8 @@ dependencies:
   mapbox_search:
   shimmer: ^3.0.0
   cached_network_image: ^3.3.1
+  skeletons: ^0.0.3
+  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:

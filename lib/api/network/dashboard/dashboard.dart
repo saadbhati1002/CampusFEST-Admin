@@ -7,7 +7,6 @@ class DashboardNetwork {
     final result = await httpManager.get(
       url: dashboardCountUrl,
     );
-    print(result);
     DashboardRes response = DashboardRes.fromJson(result);
     return response;
   }
