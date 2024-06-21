@@ -1,5 +1,5 @@
 import 'package:event/api/repository/user/user.dart';
-
+import 'package:event/model/common/common_model.dart';
 import 'package:event/model/user/user_model.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -7,8 +7,10 @@ import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/custom_image_view.dart';
+import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key});
@@ -20,6 +22,7 @@ class UserListScreen extends StatefulWidget {
 class _UserListScreenState extends State<UserListScreen> {
   List<UserData> usersList = [];
   bool isLoading = false;
+  bool isApiCallLoading = false;
   @override
   void initState() {
     _getUsersList();
@@ -54,37 +57,44 @@ class _UserListScreenState extends State<UserListScreen> {
         },
         title: "Users List",
       ),
-      body: !isLoading
-          ? ListView.builder(
-              itemCount: usersList.length,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              itemBuilder: (context, index) {
-                return userWidget(data: usersList[index], index: index);
-              },
-            )
-          : ListView.builder(
-              itemCount: 10,
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
-              itemBuilder: (context, index) {
-                return const CommonSkeleton();
-              },
-            ),
+      body: Stack(
+        children: [
+          !isLoading
+              ? ListView.builder(
+                  itemCount: usersList.length,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  itemBuilder: (context, index) {
+                    return userWidget(data: usersList[index], index: index);
+                  },
+                )
+              : ListView.builder(
+                  itemCount: 10,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 15),
+                  itemBuilder: (context, index) {
+                    return const CommonSkeleton();
+                  },
+                ),
+          isApiCallLoading ? const ShowProgressBar() : const SizedBox()
+        ],
+      ),
     );
   }
 
   Widget userWidget({UserData? data, int? index}) {
-    bool userStatic = false;
+    bool userStatus = false;
     if (data!.status == "Active") {
-      userStatic = true;
+      userStatus = true;
     } else {
-      userStatic = false;
+      userStatus = false;
     }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .165,
+      height: MediaQuery.of(context).size.height * .175,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
@@ -107,7 +117,7 @@ class _UserListScreenState extends State<UserListScreen> {
             child: CustomImage(
               width: MediaQuery.of(context).size.width * .35,
               height: MediaQuery.of(context).size.height,
-              imagePath: data!.proPic ?? "",
+              imagePath: data.proPic ?? "",
             ),
           ),
           Container(
@@ -154,11 +164,67 @@ class _UserListScreenState extends State<UserListScreen> {
                 const SizedBox(
                   height: 5,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    FlutterSwitch(
+                      width: MediaQuery.of(context).size.width * .1,
+                      height: 22,
+                      valueFontSize: 10.0,
+                      toggleSize: 15.0,
+                      value: userStatus,
+                      borderRadius: 30.0,
+                      padding: 5.0,
+                      activeColor: AppColors.appColor,
+                      inactiveColor: AppColors.greyColor,
+                      inactiveText: "",
+                      activeText: "",
+                      showOnOff: true,
+                      onToggle: (val) {
+                        _changeUserStatus(status: val, index: index);
+                        userStatus = val;
+                        setState(() {});
+                      },
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Icon(
+                        Icons.delete,
+                        color: AppColors.greyColor,
+                      ),
+                    )
+                  ],
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future _changeUserStatus({bool? status, int? index}) async {
+    try {
+      setState(() {
+        isApiCallLoading = true;
+      });
+
+      CommonRes response = await UserRepository().userStatusChangeApiCall(
+          userID: usersList[index!].id,
+          status: usersList[index].status == "Active" ? 0 : 1);
+      if (response.responseCode == "200") {
+        usersList[index].status =
+            usersList[index].status == "Active" ? "Inactive" : "Active";
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isApiCallLoading = false;
+      });
+    }
   }
 }

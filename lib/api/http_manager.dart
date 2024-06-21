@@ -41,11 +41,9 @@ class HTTPManager {
         return status! < 500;
       },
       headers: {
+        "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
         'Content-Type': 'application/json',
         'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab',
-        // "Authorization": AppConstant.bearerToken != "null"
-        //     ? "Bearer ${AppConstant.bearerToken}"
-        //     : "",
       },
     );
 
@@ -91,9 +89,7 @@ class HTTPManager {
     BuildContext? context,
   }) async {
     var optionsMain = Options(headers: {
-      "Authorization": AppConstant.bearerToken != "null"
-          ? "Bearer ${AppConstant.bearerToken}"
-          : "",
+      "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
       'Content-Type': 'application/json',
       'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab',
       "Accept": "application/json",
@@ -131,9 +127,7 @@ class HTTPManager {
   Future<dynamic> put(
       {String? url, data, Options? options, BuildContext? context}) async {
     var optionsMain = Options(headers: {
-      "Authorization": AppConstant.bearerToken != "null"
-          ? "Bearer ${AppConstant.bearerToken}"
-          : "",
+      "UID": AppConstant.userData != null ? AppConstant.userData!.id! : "",
       "Accept": "application/json",
       'Content-Type': 'application/json',
       'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab'
