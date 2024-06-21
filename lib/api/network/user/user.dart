@@ -7,6 +7,8 @@ class UserNetwork {
   static const String userStatusChangeUrl = 'e_acc_status_change.php';
   static const String userAccountDeleteUrl =
       'e_user_account_delete.php?user_id=';
+  static const String adminListUrl = 'e_admin_get_admin.php';
+
   static Future<dynamic> getUserList() async {
     final result = await httpManager.get(
       url: userListUrl,
@@ -18,17 +20,22 @@ class UserNetwork {
   static Future<dynamic> userStatusChange(params) async {
     final result =
         await httpManager.post(url: userStatusChangeUrl, data: params);
-
     CommonRes response = CommonRes.fromJson(result);
     return response;
   }
 
   static Future<dynamic> userAccountDelete(params) async {
-    print(params);
     final result =
         await httpManager.deleteWithToken(url: "$userAccountDeleteUrl$params");
-    print(result);
     CommonRes response = CommonRes.fromJson(result);
+    return response;
+  }
+
+  static Future<dynamic> getAdminList() async {
+    final result = await httpManager.get(
+      url: adminListUrl,
+    );
+    UserRes response = UserRes.fromJson(result);
     return response;
   }
 }

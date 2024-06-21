@@ -13,4 +13,8 @@ class UserRepository {
   Future<dynamic> userAccountDeleteApiCall({String? userID}) async {
     return await UserNetwork.userAccountDelete(userID);
   }
+
+  Future<dynamic> getAdminListApiCall() async {
+    return await UserNetwork.getAdminList();
+  }
 }
