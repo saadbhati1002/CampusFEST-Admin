@@ -17,4 +17,10 @@ class UserRepository {
   Future<dynamic> getAdminListApiCall() async {
     return await UserNetwork.getAdminList();
   }
+
+  Future<dynamic> adminStatusChangeApiCall(
+      {String? userID, int? status}) async {
+    final params = {"uid": userID, "status": status};
+    return await UserNetwork.adminStatusChange(params);
+  }
 }

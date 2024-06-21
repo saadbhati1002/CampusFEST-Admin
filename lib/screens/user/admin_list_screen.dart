@@ -190,7 +190,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                         activeText: "",
                         showOnOff: true,
                         onToggle: (val) {
-                          _changeUserStatus(status: val, index: index);
+                          _changeAdminStatus(index: index);
                           userStatus = val;
                           setState(() {});
                         },
@@ -200,7 +200,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          _userAccountDelete(index: index);
+                          _adminAccountDelete(index: index);
                         },
                         child: const Icon(
                           Icons.delete,
@@ -218,13 +218,13 @@ class _AdminListScreenState extends State<AdminListScreen> {
     );
   }
 
-  Future _changeUserStatus({bool? status, int? index}) async {
+  Future _changeAdminStatus({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await UserRepository().userStatusChangeApiCall(
+      CommonRes response = await UserRepository().adminStatusChangeApiCall(
           userID: adminList[index!].id,
           status: adminList[index].status == "Active" ? 0 : 1);
       if (response.responseCode == "200") {
@@ -240,7 +240,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
     }
   }
 
-  Future _userAccountDelete({int? index}) async {
+  Future _adminAccountDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
