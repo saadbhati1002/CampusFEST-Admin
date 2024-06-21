@@ -246,7 +246,7 @@ class _AdminListScreenState extends State<AdminListScreen> {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await UserRepository().userAccountDeleteApiCall(
+      CommonRes response = await UserRepository().adminAccountDeleteApiCall(
         userID: adminList[index!].id,
       );
       if (response.responseCode == "200") {
