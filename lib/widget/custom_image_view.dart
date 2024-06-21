@@ -32,9 +32,9 @@ class CustomImage extends StatelessWidget {
         : (imagePath != null && imagePath!.isNotEmpty)
             ? ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(borderRadius ?? 10),
+                  topLeft: Radius.circular(borderRadius ?? 15),
                   topRight: Radius.circular(borderRadius ?? 0),
-                  bottomLeft: Radius.circular(borderRadius ?? 10),
+                  bottomLeft: Radius.circular(borderRadius ?? 15),
                   bottomRight: Radius.circular(borderRadius ?? 0),
                 ),
                 child: CachedNetworkImage(
@@ -62,9 +62,9 @@ class CustomImage extends StatelessWidget {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(borderRadius ?? 10),
+                            topLeft: Radius.circular(borderRadius ?? 15),
                             topRight: Radius.circular(borderRadius ?? 0),
-                            bottomLeft: Radius.circular(borderRadius ?? 10),
+                            bottomLeft: Radius.circular(borderRadius ?? 15),
                             bottomRight: Radius.circular(borderRadius ?? 0),
                           ),
                           color: AppColors.whiteColor,
@@ -91,9 +91,9 @@ class CustomImage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppColors.whiteColor,
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(borderRadius ?? 10),
+                            topLeft: Radius.circular(borderRadius ?? 15),
                             topRight: Radius.circular(borderRadius ?? 0),
-                            bottomLeft: Radius.circular(borderRadius ?? 10),
+                            bottomLeft: Radius.circular(borderRadius ?? 15),
                             bottomRight: Radius.circular(borderRadius ?? 0),
                           ),
                           border: Border.all(

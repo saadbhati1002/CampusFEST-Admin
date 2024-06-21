@@ -1,5 +1,6 @@
 import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
+import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -100,19 +101,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                      title: "Total Admin",
-                      count: dashboardData?.totalAdmins ?? "0",
-                      backgroundColor: const Color(0xFF51C6F9),
-                      textColor: AppColors.whiteColor,
-                      image: "assets/user.png",
-                      onTap: () async {
-                        var response =
-                            await Get.to(() => const AdminListScreen());
-                        if (response != null) {
-                          dashboardData?.totalAdmins = response;
-                          setState(() {});
-                        }
-                      }),
+                    title: "Total Admin",
+                    count: dashboardData?.totalAdmins ?? "0",
+                    backgroundColor: const Color(0xFF51C6F9),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/user.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const AdminListScreen());
+                      if (response != null) {
+                        dashboardData?.totalAdmins = response;
+                        setState(() {});
+                      }
+                    },
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
                   ),
@@ -122,6 +124,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF7251F9),
                     textColor: AppColors.whiteColor,
                     image: "assets/category.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const CategoryListScreen());
+                      if (response != null) {
+                        dashboardData?.totalCategories = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
