@@ -1,6 +1,7 @@
 import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
 import 'package:event/screens/category/category_list_screen.dart';
+import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -142,6 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF51F9C6),
                     textColor: AppColors.whiteColor,
                     image: "assets/event.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const EventListScreen());
+                      if (response != null) {
+                        dashboardData?.totalEvent = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
