@@ -369,7 +369,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
     int status = categoryStatus == "Publish" ? 1 : 0;
     request.body =
         '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-    print(request.body);
+
     if (categoryImage != null && categoryCoverImage != null) {
       List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
       String base64ImageCover = base64Encode(imageBytesCover);
@@ -397,7 +397,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
       setState(() {
         isLoading = true;
       });
-      print(request.body);
+
       request.headers.addAll(AppConstant.headers);
       http.StreamedResponse response = await request.send();
 
