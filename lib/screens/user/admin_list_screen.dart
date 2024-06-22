@@ -230,6 +230,8 @@ class _AdminListScreenState extends State<AdminListScreen> {
       if (response.responseCode == "200") {
         adminList[index].status =
             adminList[index].status == "Active" ? "Inactive" : "Active";
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -252,6 +254,8 @@ class _AdminListScreenState extends State<AdminListScreen> {
       if (response.responseCode == "200") {
         adminList.removeAt(index);
         AppConstant.showToastMessage("Account deleted successfully");
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
       }
     } catch (e) {
       debugPrint(e.toString());

@@ -1,5 +1,6 @@
 import 'package:event/api/repository/category/category.dart';
 import 'package:event/model/category/category_model.dart';
+import 'package:event/model/common/common_model.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -187,7 +188,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                       width: 10,
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        _categoryDelete(index: index);
+                      },
                       child: const Icon(
                         Icons.delete,
                         color: AppColors.greyColor,
@@ -202,5 +205,29 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
         ],
       ),
     );
+  }
+
+  Future _categoryDelete({int? index}) async {
+    try {
+      setState(() {
+        isApiCallLoading = true;
+      });
+
+      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
+        userID: categoryList[index!].id,
+      );
+      if (response.responseCode == "200") {
+        categoryList.removeAt(index);
+        AppConstant.showToastMessage("Category deleted successfully");
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isApiCallLoading = false;
+      });
+    }
   }
 }

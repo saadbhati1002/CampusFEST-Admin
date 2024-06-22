@@ -228,6 +228,8 @@ class _UserListScreenState extends State<UserListScreen> {
       if (response.responseCode == "200") {
         usersList[index].status =
             usersList[index].status == "Active" ? "Inactive" : "Active";
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -250,6 +252,8 @@ class _UserListScreenState extends State<UserListScreen> {
       if (response.responseCode == "200") {
         usersList.removeAt(index);
         AppConstant.showToastMessage("Account deleted successfully");
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
       }
     } catch (e) {
       debugPrint(e.toString());
