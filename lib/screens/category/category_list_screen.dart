@@ -1,6 +1,7 @@
 import 'package:event/api/repository/category/category.dart';
 import 'package:event/model/category/category_model.dart';
 import 'package:event/model/common/common_model.dart';
+import 'package:event/screens/category/add/category_add_screen.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -47,6 +48,22 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
     }
   }
 
+  Future _getCategoryWithoutLoading() async {
+    try {
+      CategoryRes response =
+          await CategoryRepository().getCategoryListApiCall();
+      if (response.categories.isNotEmpty) {
+        categoryList = response.categories;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
   Future<bool> _onBackPress() async {
     Navigator.pop(context, categoryList.length);
     return false;
@@ -65,7 +82,12 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
           title: "Category List",
         ),
         floatingActionButton: GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            var response = await Get.to(() => const CategoryAddScreen());
+            if (response != null) {
+              _getCategoryWithoutLoading();
+            }
+          },
           child: Container(
               height: 38,
               padding: const EdgeInsets.symmetric(horizontal: 15),

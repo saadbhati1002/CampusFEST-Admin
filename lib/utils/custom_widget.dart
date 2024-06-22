@@ -18,10 +18,10 @@ textfield(
     bool? obstacle,
     TextInputType? keyboardType}) {
   return Container(
-    height: 55,
+    height: 50,
     width: Width,
     decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15), color: AppColors.whiteColor),
+        borderRadius: BorderRadius.circular(10), color: AppColors.whiteColor),
     child: TextFormField(
       keyboardType: keyboardType ?? TextInputType.text,
       obscureText: obstacle ?? false,
@@ -38,22 +38,26 @@ textfield(
           padding: const EdgeInsets.all(6),
           child: suffix,
         ),
-        prefixIcon: prefix ??
-            Padding(
-              padding: const EdgeInsets.all(6),
-              child: prefix,
-            ),
+        prefix: Padding(
+          padding: const EdgeInsets.all(6),
+          child: prefix,
+        ),
         border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(15))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(10),
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(color: AppColors.darkblue),
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(10),
         ),
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.greyColor.withOpacity(0.6),
-            ),
-            borderRadius: BorderRadius.circular(15)),
+          borderSide: BorderSide(
+            color: AppColors.greyColor.withOpacity(0.6),
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        contentPadding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
       ),
       validator: validator,
     ),

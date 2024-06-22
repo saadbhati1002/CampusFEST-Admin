@@ -35,4 +35,10 @@ class AppConstant {
         textColor: Colors.white,
         fontSize: 14.0);
   }
+
+  static var headers = {
+    'Content-Type': 'application/json',
+    'Cookie': 'PHPSESSID=oonu3ro0agbeiik4t0l6egt8ab',
+    "uid": AppConstant.userData != null ? AppConstant.userData!.id! : "",
+  };
 }

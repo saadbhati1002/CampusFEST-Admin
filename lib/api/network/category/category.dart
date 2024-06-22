@@ -6,6 +6,8 @@ class CategoryNetwork {
   static const String categoryListUrl = 'e_admin_get_categories.php';
   static const String categoryDeleteUrl =
       'e_admin_category_delete.php?category_id=';
+  static const String addCategoryUrl = 'e_admin_add_category.php';
+
   static Future<dynamic> getCategoryList() async {
     final result = await httpManager.get(
       url: categoryListUrl,
@@ -17,6 +19,13 @@ class CategoryNetwork {
   static Future<dynamic> categoryDelete(params) async {
     final result =
         await httpManager.deleteWithToken(url: "$categoryDeleteUrl$params");
+    CommonRes response = CommonRes.fromJson(result);
+    return response;
+  }
+
+  static Future<dynamic> addCategory(params) async {
+    final result = await httpManager.post(url: addCategoryUrl);
+    print(result);
     CommonRes response = CommonRes.fromJson(result);
     return response;
   }
