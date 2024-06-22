@@ -7,6 +7,8 @@ class CategoryNetwork {
   static const String categoryDeleteUrl =
       'e_admin_category_delete.php?category_id=';
   static const String addCategoryUrl = 'e_admin_add_category.php';
+  static const String updateCategoryUrl =
+      'e_admin_update_category.php?category_id=';
 
   static Future<dynamic> getCategoryList() async {
     final result = await httpManager.get(

@@ -1,7 +1,7 @@
 import 'package:event/api/repository/category/category.dart';
 import 'package:event/model/category/category_model.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/screens/category/add/category_add_screen.dart';
+import 'package:event/screens/category/add_update/category_add_screen.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -83,7 +83,9 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
-            var response = await Get.to(() => const CategoryAddScreen());
+            var response = await Get.to(() => const CategoryAddScreen(
+                  isFromAdd: true,
+                ));
             if (response != null) {
               _getCategoryWithoutLoading();
             }
@@ -199,7 +201,15 @@ class _CategoryListScreenState extends State<CategoryListScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        var response = await Get.to(() => CategoryAddScreen(
+                              isFromAdd: false,
+                              data: data,
+                            ));
+                        if (response != null) {
+                          _getCategoryWithoutLoading();
+                        }
+                      },
                       child: const Icon(
                         Icons.edit_square,
                         color: AppColors.greyColor,
