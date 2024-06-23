@@ -105,127 +105,136 @@ class _EventListScreenState extends State<EventListScreen> {
   }
 
   Widget eventWidget({EventData? data, int? index}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .195,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 1, color: AppColors.appColor),
-      ),
-      // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: () {
-              if (data!.img != null) {
-                Get.to(
-                  () => FullImageScreen(
-                    imageUrl: "${AppConstant.imageUrl}${data.img}",
-                  ),
-                );
-              }
-            },
-            child: CustomImage(
-              width: MediaQuery.of(context).size.width * .35,
-              height: MediaQuery.of(context).size.height,
-              imagePath: data?.img ?? "",
+    return GestureDetector(
+      onTap: () {
+        // Get.to(
+        //   () => EventDetailScreen(
+        //     eventID: data.id,
+        //   ),
+        // );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * .195,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(width: 1, color: AppColors.appColor),
+        ),
+        // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                if (data!.img != null) {
+                  Get.to(
+                    () => FullImageScreen(
+                      imageUrl: "${AppConstant.imageUrl}${data.img}",
+                    ),
+                  );
+                }
+              },
+              child: CustomImage(
+                width: MediaQuery.of(context).size.width * .35,
+                height: MediaQuery.of(context).size.height,
+                imagePath: data?.img ?? "",
+              ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            width: MediaQuery.of(context).size.width * .56,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  data?.title ?? '',
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w600,
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              width: MediaQuery.of(context).size.width * .56,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    data?.title ?? '',
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  data?.eventData ?? '',
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    data?.eventData ?? '',
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Text(
-                  data!.eventTime ?? '',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.appColor,
-                    fontWeight: FontWeight.w600,
+                  Text(
+                    data!.eventTime ?? '',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.appColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  'Event Status: ${data.eventStatus}',
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'Event Status: ${data.eventStatus}',
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Text(
-                  "📌 ${data.address}",
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    "📌 ${data.address}",
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        // var response = await Get.to(() => CategoryAddScreen(
-                        //       isFromAdd: false,
-                        //       data: data,
-                        //     ));
-                        // if (response != null) {
-                        //   _getCategoryWithoutLoading();
-                        // }
-                      },
-                      child: const Icon(
-                        Icons.edit_square,
-                        color: AppColors.greyColor,
-                        size: 20,
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () async {
+                          // var response = await Get.to(() => CategoryAddScreen(
+                          //       isFromAdd: false,
+                          //       data: data,
+                          //     ));
+                          // if (response != null) {
+                          //   _getCategoryWithoutLoading();
+                          // }
+                        },
+                        child: const Icon(
+                          Icons.edit_square,
+                          color: AppColors.greyColor,
+                          size: 20,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // _categoryDelete(index: index);
-                      },
-                      child: const Icon(
-                        Icons.delete,
-                        color: AppColors.greyColor,
-                        size: 20,
+                      const SizedBox(
+                        width: 10,
                       ),
-                    ),
-                  ],
-                )
-              ],
+                      GestureDetector(
+                        onTap: () {
+                          // _categoryDelete(index: index);
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          color: AppColors.greyColor,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
