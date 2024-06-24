@@ -8,4 +8,8 @@ class EventRepository {
   Future<dynamic> getEvenDetailApiCall({String? eventID}) async {
     return await EventNetwork.getEventDetail(eventID);
   }
+
+  Future<dynamic> eventDeleteApiCall({String? userID}) async {
+    return await EventNetwork.eventDelete(userID);
+  }
 }

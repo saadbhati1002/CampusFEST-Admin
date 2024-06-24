@@ -27,7 +27,7 @@ class CategoryNetwork {
 
   static Future<dynamic> addCategory(params) async {
     final result = await httpManager.post(url: addCategoryUrl);
-    print(result);
+
     CommonRes response = CommonRes.fromJson(result);
     return response;
   }

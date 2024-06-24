@@ -9,6 +9,7 @@ import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:event/model/common/common_model.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -186,7 +187,7 @@ class _EventListScreenState extends State<EventListScreen> {
                   ),
                   Text(
                     "📌 ${data.address}",
-                    maxLines: 2,
+                    maxLines: 1,
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.blackColor,
@@ -220,7 +221,7 @@ class _EventListScreenState extends State<EventListScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // _categoryDelete(index: index);
+                          _eventDelete(index: index);
                         },
                         child: const Icon(
                           Icons.delete,
@@ -237,5 +238,29 @@ class _EventListScreenState extends State<EventListScreen> {
         ),
       ),
     );
+  }
+
+  Future _eventDelete({int? index}) async {
+    try {
+      setState(() {
+        isApiCallLoading = true;
+      });
+
+      CommonRes response = await EventRepository().eventDeleteApiCall(
+        userID: eventList[index!].id,
+      );
+      if (response.responseCode == "200") {
+        eventList.removeAt(index);
+        AppConstant.showToastMessage("Event deleted successfully");
+      } else {
+        AppConstant.showToastMessage(response.responseMsg);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isApiCallLoading = false;
+      });
+    }
   }
 }
