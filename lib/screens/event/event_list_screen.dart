@@ -1,5 +1,6 @@
 import 'package:event/api/repository/event/event.dart';
 import 'package:event/model/event/event_model.dart';
+import 'package:event/screens/event/ticket/event_ticket_screen.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -261,6 +262,22 @@ class _EventListScreenState extends State<EventListScreen> {
                           Icons.delete,
                           color: AppColors.greyColor,
                           size: 20,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            () => EventTicketScreen(
+                              eventID: data.id,
+                            ),
+                          );
+                        },
+                        child: Image.asset(
+                          "assets/tickets.png",
+                          color: AppColors.greyColor,
                         ),
                       ),
                     ],
