@@ -2,6 +2,7 @@ import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
 import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
+import 'package:event/screens/faq_category/faq_category_list.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -191,6 +192,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF368CB1),
                     textColor: AppColors.whiteColor,
                     image: "assets/faq.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const CategoryListScreen());
+                      if (response != null) {
+                        dashboardData?.totalCategories = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
@@ -201,6 +210,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFFB13D36),
                     textColor: AppColors.whiteColor,
                     image: "assets/faq.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const FaqCategoryListScreen());
+                      if (response != null) {
+                        dashboardData?.totalFaqCategories = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,

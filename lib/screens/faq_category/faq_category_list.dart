@@ -1,8 +1,8 @@
 import 'package:event/api/repository/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/faq_category/faq_category.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/screens/category/add_update/category_add_screen.dart';
-import 'package:event/screens/faq_catogory/faq%20update/faq_category_add_screen.dart';
+import 'package:event/model/faq_category/faq_category_model.dart';
+import 'package:event/screens/faq_category/add_update/faq_category_add_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
@@ -10,7 +10,6 @@ import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class FaqCategoryListScreen extends StatefulWidget {
   const FaqCategoryListScreen({super.key});
@@ -22,20 +21,20 @@ class FaqCategoryListScreen extends StatefulWidget {
 class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<CategoryData> categoryList = [];
+  List<FaqCategoryData> categoryList = [];
   @override
   void initState() {
-    _getCategoryData();
+    _getFaqCategoryData();
     super.initState();
   }
 
-  Future _getCategoryData() async {
+  Future _getFaqCategoryData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
+      FaqCategoryRes response =
+          await FaqCategoryRepository().getFaqCategoryListApiCall();
       if (response.categories.isNotEmpty) {
         categoryList = response.categories;
       }
@@ -48,10 +47,10 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
     }
   }
 
-  Future _getCategoryWithoutLoading() async {
+  Future _getFaqCategoryWithoutLoading() async {
     try {
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
+      FaqCategoryRes response =
+          await FaqCategoryRepository().getFaqCategoryListApiCall();
       if (response.categories.isNotEmpty) {
         categoryList = response.categories;
       }
@@ -79,7 +78,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
           onTap: () {
             Navigator.pop(context, categoryList.length);
           },
-          title: "Total FAQ Category",
+          title: "FAQ Category",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
@@ -87,7 +86,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                   isFromAdd: true,
                 ));
             if (response != null) {
-              _getCategoryWithoutLoading();
+              _getFaqCategoryWithoutLoading();
             }
           },
           child: Container(
@@ -140,7 +139,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
     );
   }
 
-  Widget categoryWidget({CategoryData? data, int? index}) {
+  Widget categoryWidget({FaqCategoryData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -188,13 +187,13 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        var response = await Get.to(() => CategoryAddScreen(
-                              isFromAdd: false,
-                              data: data,
-                            ));
-                        if (response != null) {
-                          _getCategoryWithoutLoading();
-                        }
+                        // var response = await Get.to(() => CategoryAddScreen(
+                        //       isFromAdd: false,
+                        //       data: data,
+                        //     ));
+                        // if (response != null) {
+                        //   _getFaqCategoryWithoutLoading();
+                        // }
                       },
                       child: const Icon(
                         Icons.edit_square,
