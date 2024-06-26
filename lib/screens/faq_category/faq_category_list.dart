@@ -1,4 +1,3 @@
-import 'package:event/api/repository/category/category.dart';
 import 'package:event/api/repository/faq_category/faq_category.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/model/faq_category/faq_category_model.dart';
@@ -25,6 +24,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
   @override
   void initState() {
     _getFaqCategoryData();
+
     super.initState();
   }
 
@@ -143,7 +143,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .12,
+
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
@@ -155,14 +155,13 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            width: MediaQuery.of(context).size.width * .56,
+            width: MediaQuery.of(context).size.width * .9,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "title",
-                  // data.title ?? '',
+                  data?.title ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
@@ -170,8 +169,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                   ),
                 ),
                 Text(
-                  "status",
-                  // 'Status: ${data.status}',
+                  'Status: ${data?.status}',
                   maxLines: 2,
                   style: const TextStyle(
                     fontSize: 12,
@@ -187,13 +185,13 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // var response = await Get.to(() => CategoryAddScreen(
-                        //       isFromAdd: false,
-                        //       data: data,
-                        //     ));
-                        // if (response != null) {
-                        //   _getFaqCategoryWithoutLoading();
-                        // }
+                        var response = await Get.to(() => FaqCategoryAddScreen(
+                              isFromAdd: false,
+                              data: data,
+                            ));
+                        if (response != null) {
+                          _getFaqCategoryWithoutLoading();
+                        }
                       },
                       child: const Icon(
                         Icons.edit_square,
@@ -206,7 +204,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _categoryDelete(index: index);
+                        _faqCategoryDelete(index: index);
                       },
                       child: const Icon(
                         Icons.delete,
@@ -224,18 +222,19 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
     );
   }
 
-  Future _categoryDelete({int? index}) async {
+  Future _faqCategoryDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
+      CommonRes response =
+          await FaqCategoryRepository().faqCategoryDeleteApiCall(
         userID: categoryList[index!].id,
       );
       if (response.responseCode == "200") {
         categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        AppConstant.showToastMessage("Faq category deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

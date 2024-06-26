@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:event/api/network/faq_category/faq_category.dart';
 
 class FaqCategoryRepository {
@@ -7,20 +5,27 @@ class FaqCategoryRepository {
     return await FaqCategoryNetwork.getFaqCategoryList();
   }
 
-  // Future<dynamic> categoryDeleteApiCall({String? userID}) async {
-  //   return await CategoryNetwork.categoryDelete(userID);
-  // }
+  Future<dynamic> faqCategoryDeleteApiCall({String? userID}) async {
+    return await FaqCategoryNetwork.faqCategoryDelete(userID);
+  }
 
-  Future<dynamic> addCategoryApiCall(
-      {String? title, int? status, File? image, File? coverImage}) async {
-    // final body = FormData.fromMap({
-    //   "title": title,
-    //   "status": status,
-    //   "image": await MultipartFile.fromFile(image!.path,
-    //       filename: image.path.split('/').last),
-    //   "cover_img": await MultipartFile.fromFile(coverImage!.path,
-    //       filename: coverImage.path.split('/').last),
-    // });
-    // return await CategoryNetwork.addCategory(body);
+  Future<dynamic> addFaqCategoryApiCall({
+    String? title,
+    int? status,
+  }) async {
+    final body = {
+      "title": title,
+      "status": status,
+    };
+    return await FaqCategoryNetwork.addFaqCategory(body);
+  }
+
+  Future<dynamic> updateFaqCategoryApiCall(
+      {String? title, int? status, String? faqCategoryID}) async {
+    final body = {
+      "title": title,
+      "status": status,
+    };
+    return await FaqCategoryNetwork.updateFaqCategory(body, faqCategoryID);
   }
 }

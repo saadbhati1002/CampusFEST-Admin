@@ -53,7 +53,7 @@ class HTTPManager {
       try {
         final response = await dio.post(
           url!,
-          data: jsonEncode(data),
+          data: json.encode(data),
           options: optionsMain,
         );
 
