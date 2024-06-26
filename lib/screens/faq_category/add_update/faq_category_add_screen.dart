@@ -1,15 +1,12 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:event/api/network/category/category.dart';
+import 'package:event/api/repository/faq_category/faq_category.dart';
 import 'package:event/model/category/category_model.dart';
+import 'package:event/model/common/common_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class FaqCategoryAddScreen extends StatefulWidget {
   final bool? isFromAdd;
@@ -23,7 +20,7 @@ class FaqCategoryAddScreen extends StatefulWidget {
 
 class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
   TextEditingController titleController = TextEditingController();
-  File? categoryImage, categoryCoverImage;
+
   bool isLoading = false;
   String? categoryStatus;
   @override
@@ -148,7 +145,7 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (widget.isFromAdd == true) {
-                        _addCategory();
+                        _addFaqCategory();
                       } else {
                         _updateCategory();
                       }
@@ -181,7 +178,7 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
     );
   }
 
-  Future _addCategory() async {
+  Future _addFaqCategory() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
@@ -195,22 +192,12 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       setState(() {
         isLoading = true;
       });
-
       int status = categoryStatus == "Publish" ? 1 : 0;
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
+      CommonRes response = await FaqCategoryRepository().addCategoryApiCall(
+          status: status, title: titleController.text.trim());
 
-      var request = http.Request('POST',
-          Uri.parse(AppConstant.baseUrl + CategoryNetwork.addCategoryUrl));
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category added successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Faq category added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -233,53 +220,21 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    print(
-        "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}");
-    var request = http.Request(
-        'PUT',
-        Uri.parse(
-            "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}"));
-    int status = categoryStatus == "Publish" ? 1 : 0;
-    request.body =
-        '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-
-    if (categoryImage != null && categoryCoverImage != null) {
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-    } else {
-      if (categoryImage != null) {
-        List<int> imageBytes = categoryImage!.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image","cover_img":"" }''';
-      }
-      if (categoryCoverImage != null) {
-        List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-        String base64ImageCover = base64Encode(imageBytesCover);
-
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status,  "cover_img": "$base64ImageCover","img":""}''';
-      }
-    }
 
     try {
       setState(() {
         isLoading = true;
       });
 
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
+      // request.headers.addAll(AppConstant.headers);
+      // http.StreamedResponse response = await request.send();
 
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category updated successfully");
-        Navigator.pop(context, 1);
-      } else {
-        AppConstant.showToastMessage("Getting some error please try again");
-      }
+      // if (response.statusCode == 200) {
+      //   AppConstant.showToastMessage("Category updated successfully");
+      //   Navigator.pop(context, 1);
+      // } else {
+      //   AppConstant.showToastMessage("Getting some error please try again");
+      // }
     } catch (e) {
       debugPrint(e.toString());
     } finally {
