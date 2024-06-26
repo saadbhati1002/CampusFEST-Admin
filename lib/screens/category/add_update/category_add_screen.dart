@@ -360,8 +360,7 @@ class _CategoryAddScreenState extends State<CategoryAddScreen> {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    print(
-        "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}");
+
     var request = http.Request(
         'PUT',
         Uri.parse(

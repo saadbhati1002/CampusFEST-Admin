@@ -138,7 +138,7 @@ class HTTPManager {
       try {
         final response = await dio.put(
           url!,
-          data: data,
+          data: json.encode(data),
           //  data: data,
           options: optionsMain,
         );

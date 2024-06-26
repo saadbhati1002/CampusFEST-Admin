@@ -8,6 +8,7 @@ class EventNetwork {
   static const String eventDetailUrl = 'e_admin_get_event.php?event_id=';
   static const String eventDeleteUrl = 'e_admin_event_delete.php?event_id=';
   static const String eventAddUrl = 'e_admin_add_event.php';
+  static const String eventUpdateUrl = 'e_admin_update_event.php?event_id=';
   static Future<dynamic> getEventList() async {
     final result = await httpManager.get(
       url: eventListUrl,
@@ -33,8 +34,16 @@ class EventNetwork {
   }
 
   static Future<dynamic> eventAdd(params) async {
-    print(params);
     final result = await httpManager.post(url: eventAddUrl, data: params);
+
+    CommonRes response = CommonRes.fromJson(result);
+    return response;
+  }
+
+  static Future<dynamic> eventUpdate(params, eventID) async {
+    print(params);
+    final result =
+        await httpManager.put(url: "$eventUpdateUrl$eventID", data: params);
 
     CommonRes response = CommonRes.fromJson(result);
     return response;

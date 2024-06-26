@@ -235,13 +235,14 @@ class _EventListScreenState extends State<EventListScreen> {
                     children: [
                       GestureDetector(
                         onTap: () async {
-                          // var response = await Get.to(() => CategoryAddScreen(
-                          //       isFromAdd: false,
-                          //       data: data,
-                          //     ));
-                          // if (response != null) {
-                          //   _getCategoryWithoutLoading();
-                          // }
+                          var response =
+                              await Get.to(() => AddUpdateEventScreen(
+                                    isFromAdd: false,
+                                    data: data,
+                                  ));
+                          if (response != null) {
+                            _getEventWithoutLoading();
+                          }
                         },
                         child: const Icon(
                           Icons.edit_square,

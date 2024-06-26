@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:event/api/network/event/event.dart';
 import 'package:event/api/repository/category/category.dart';
 import 'package:event/api/repository/event/event.dart';
 import 'package:event/model/category/category_model.dart';
@@ -18,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
 
 class AddUpdateEventScreen extends StatefulWidget {
   final bool? isFromAdd;
@@ -49,7 +46,47 @@ class _AddUpdateEventScreenState extends State<AddUpdateEventScreen> {
   @override
   void initState() {
     _getCategoryData();
+    if (widget.isFromAdd == false) {
+      _getData();
+    }
     super.initState();
+  }
+
+  _getData() {
+    if (widget.data!.title != null && widget.data!.title != "") {
+      titleController.text = widget.data!.title!;
+    }
+    if (widget.data!.eventData != null && widget.data!.eventData != "") {
+      eventDateController.text = widget.data!.eventData!;
+    }
+    if (widget.data!.startTime != null && widget.data!.startTime != "") {
+      eventStatTimeController.text = widget.data!.startTime!;
+    }
+    if (widget.data!.endTime != null && widget.data!.endTime != "") {
+      eventEndTimeController.text = widget.data!.endTime!;
+    }
+    if (widget.data!.eventPlace != null && widget.data!.eventPlace != "") {
+      placeController.text = widget.data!.eventData!;
+    }
+    if (widget.data!.address != null && widget.data!.address != "") {
+      addressController.text = widget.data!.address!;
+    }
+    if (widget.data!.latitude != null && widget.data!.latitude != "") {
+      latitudeController.text = widget.data!.latitude!;
+    }
+    if (widget.data!.longitude != null && widget.data!.longitude != "") {
+      longitudeController.text = widget.data!.longitude!;
+    }
+    if (widget.data!.status != null && widget.data!.status != null) {
+      eventStatus = widget.data!.status;
+    }
+    if (widget.data!.description != null && widget.data!.description != null) {
+      descriptionController.text = widget.data!.description!;
+    }
+    if (widget.data!.disclaimer != null && widget.data!.disclaimer != null) {
+      disclaimerController.text = widget.data!.disclaimer!;
+    }
+    setState(() {});
   }
 
   Future _getCategoryData() async {
@@ -61,6 +98,13 @@ class _AddUpdateEventScreenState extends State<AddUpdateEventScreen> {
           await CategoryRepository().getCategoryListApiCall();
       if (response.categories.isNotEmpty) {
         categoryList = response.categories;
+        if (widget.isFromAdd == false) {
+          for (int i = 0; i < categoryList.length; i++) {
+            if (categoryList[i].id == widget.data!.catID) {
+              selectedCategory = categoryList[i];
+            }
+          }
+        }
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -426,7 +470,7 @@ class _AddUpdateEventScreenState extends State<AddUpdateEventScreen> {
                       if (widget.isFromAdd == true) {
                         _addEvent();
                       } else {
-                        // _updateCategory();
+                        _updateEvent();
                       }
                     },
                     child: Container(
@@ -690,7 +734,6 @@ class _AddUpdateEventScreenState extends State<AddUpdateEventScreen> {
       var df = DateFormat("h:mma");
       var startTime = df.parse(eventStatTimeController.text);
       var endTime = df.parse(eventEndTimeController.text);
-      print(DateFormat('HH:mm').format(startTime));
 
       List<int> imageBytes = eventImage!.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
@@ -718,24 +761,59 @@ class _AddUpdateEventScreenState extends State<AddUpdateEventScreen> {
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
       }
-      // var request = http.Request(
-      //   'POST',
-      //   Uri.parse(
-      //     AppConstant.baseUrl + EventNetwork.eventAddUrl,
-      //   ),
-      // );
-      // request.body =
-      //     '''{"cid":"${selectedCategory!.id}","title": "${titleController.text.toString()}","sdate":"${eventDateController.text.trim()}","stime":"${DateFormat('HH:mm').format(startTime)}:00","etime":"${DateFormat('HH:mm').format(endTime)}:00","latitude":"${latitudeController.text.toString()}","longtitude":"${longitudeController.text.toString()}","place_name":"${placeController.text.toString()}","address":"${addressController.text.toString()}","description":"${descriptionController.text.toString()}","disclaimer":"${disclaimerController.text.toString()}","status":$status,}''';
-      // request.headers.addAll(AppConstant.headers);
-      // print(request.body);
-      // http.StreamedResponse response = await request.send();
-      // print(response.statusCode);
-      // if (response.statusCode == 200) {
-      //   AppConstant.showToastMessage("Event added successfully");
-      //   Navigator.pop(context, 1);
-      // } else {
-      //   AppConstant.showToastMessage("Getting some error please try again");
-      // }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future _updateEvent() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+
+      int status = eventStatus == "Publish" ? 1 : 0;
+      var df = DateFormat("h:mma");
+      var startTime = df.parse(eventStatTimeController.text);
+      var endTime = df.parse(eventEndTimeController.text);
+      List<int> imageBytesCover = [];
+      String? base64ImageCover;
+      List<int> imageBytes = [];
+      String? base64Image;
+      if (eventImage != null) {
+        imageBytes = eventImage!.readAsBytesSync();
+        base64Image = base64Encode(imageBytes);
+      }
+      if (eventCoverImage != null) {
+        imageBytesCover = eventCoverImage!.readAsBytesSync();
+        base64ImageCover = base64Encode(imageBytesCover);
+      }
+      CommonRes response = await EventRepository().eventUpdateApiCall(
+          address: addressController.text.trim(),
+          categoryID: selectedCategory!.id,
+          coverImage: base64ImageCover,
+          date: eventDateController.text.trim(),
+          description: descriptionController.text.trim(),
+          disclaimer: disclaimerController.text.trim(),
+          endTime: "${DateFormat('HH:mm').format(endTime)}:00",
+          image: base64Image,
+          latitude: latitudeController.text.trim(),
+          longitude: longitudeController.text.trim(),
+          placeName: placeController.text.trim(),
+          statTime: "${DateFormat('HH:mm').format(startTime)}:00",
+          status: status,
+          title: titleController.text.trim(),
+          eventID: widget.data!.id);
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Event updated successfully");
+        Navigator.pop(context, 1);
+      } else {
+        AppConstant.showToastMessage("Getting some error please try again");
+      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {

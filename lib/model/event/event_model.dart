@@ -41,6 +41,14 @@ class EventData {
   String? eventStatus;
   String? eventTime;
   String? totalTickets;
+  String? startTime;
+  String? endTime;
+  String? latitude;
+  String? longitude;
+  String? eventPlace;
+  String? description;
+  String? disclaimer;
+  String? catID;
 
   EventData(
       {id,
@@ -52,7 +60,15 @@ class EventData {
       status,
       eventStatus,
       eventTime,
-      totalTickets});
+      totalTickets,
+      startTime,
+      endTime,
+      latitude,
+      longitude,
+      catID,
+      disclaimer,
+      description,
+      eventPlace});
 
   EventData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,6 +81,14 @@ class EventData {
     eventStatus = json['event_status'];
     eventTime = json['event_time'];
     totalTickets = json['total_tickets'];
+    startTime = json['start_time'];
+    endTime = json['end_time'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
+    eventPlace = json['place_name'];
+    catID = json['cid'];
+    description = json['description'];
+    disclaimer = json['disclaimer'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +103,8 @@ class EventData {
     data['event_status'] = eventStatus;
     data['event_time'] = eventTime;
     data['total_tickets'] = totalTickets;
+    data['start_time'] = startTime;
+    data['end_time'] = endTime;
     return data;
   }
 }
