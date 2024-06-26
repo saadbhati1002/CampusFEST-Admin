@@ -1,6 +1,6 @@
 import 'package:event/api/repository/faq_category/faq_category.dart';
-import 'package:event/model/category/category_model.dart';
 import 'package:event/model/common/common_model.dart';
+import 'package:event/model/faq_category/faq_category_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 
 class FaqCategoryAddScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final CategoryData? data;
+  final FaqCategoryData? data;
 
   const FaqCategoryAddScreen({super.key, this.data, this.isFromAdd});
 
@@ -22,11 +22,24 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
   TextEditingController titleController = TextEditingController();
 
   bool isLoading = false;
-  String? categoryStatus;
+  String? faqCategoryStatus;
   @override
   void initState() {
     _checkData();
+    if (widget.isFromAdd == false) {
+      _getData();
+    }
     super.initState();
+  }
+
+  _getData() {
+    if (widget.data!.title != null && widget.data!.title != "") {
+      titleController.text = widget.data!.title!;
+    }
+    if (widget.data!.status != null && widget.data!.status != null) {
+      faqCategoryStatus = widget.data!.status;
+    }
+    setState(() {});
   }
 
   Future _checkData() async {
@@ -37,7 +50,7 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       titleController.text = widget.data!.title!;
     }
     if (widget.data!.status != null && widget.data!.status != null) {
-      categoryStatus = widget.data!.status;
+      faqCategoryStatus = widget.data!.status;
     }
     setState(() {});
   }
@@ -116,20 +129,20 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           hint: Text(
-                            categoryStatus ?? "Status",
+                            faqCategoryStatus ?? "Status",
                             maxLines: 1,
                             style: TextStyle(
-                              color: categoryStatus == null
+                              color: faqCategoryStatus == null
                                   ? AppColors.greyColor
                                   : AppColors.textColor,
                               fontSize: 16,
-                              fontWeight: categoryStatus == null
+                              fontWeight: faqCategoryStatus == null
                                   ? FontWeight.w400
                                   : FontWeight.w500,
                             ),
                           ),
                           onChanged: (value) {
-                            categoryStatus = value;
+                            faqCategoryStatus = value;
                             setState(() {});
                           },
                         ),
@@ -147,7 +160,7 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
                       if (widget.isFromAdd == true) {
                         _addFaqCategory();
                       } else {
-                        _updateCategory();
+                        _updateFaqCategory();
                       }
                     },
                     child: Container(
@@ -183,7 +196,7 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (faqCategoryStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
@@ -192,9 +205,11 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       setState(() {
         isLoading = true;
       });
-      int status = categoryStatus == "Publish" ? 1 : 0;
-      CommonRes response = await FaqCategoryRepository().addCategoryApiCall(
-          status: status, title: titleController.text.trim());
+      int status = faqCategoryStatus == "Publish" ? 1 : 0;
+      CommonRes response = await FaqCategoryRepository().addFaqCategoryApiCall(
+        status: status,
+        title: titleController.text.trim(),
+      );
 
       if (response.responseCode == "200") {
         AppConstant.showToastMessage("Faq category added successfully");
@@ -211,12 +226,12 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
     }
   }
 
-  Future _updateCategory() async {
+  Future _updateFaqCategory() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (faqCategoryStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
@@ -225,16 +240,20 @@ class _FaqCategoryAddScreenState extends State<FaqCategoryAddScreen> {
       setState(() {
         isLoading = true;
       });
+      int status = faqCategoryStatus == "Publish" ? 1 : 0;
 
-      // request.headers.addAll(AppConstant.headers);
-      // http.StreamedResponse response = await request.send();
+      CommonRes response = await FaqCategoryRepository()
+          .updateFaqCategoryApiCall(
+              status: status,
+              title: titleController.text.trim(),
+              faqCategoryID: widget.data!.id);
 
-      // if (response.statusCode == 200) {
-      //   AppConstant.showToastMessage("Category updated successfully");
-      //   Navigator.pop(context, 1);
-      // } else {
-      //   AppConstant.showToastMessage("Getting some error please try again");
-      // }
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Faq Category updated successfully");
+        Navigator.pop(context, 1);
+      } else {
+        AppConstant.showToastMessage("Getting some error please try again");
+      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {

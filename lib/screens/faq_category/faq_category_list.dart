@@ -24,6 +24,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
   @override
   void initState() {
     _getFaqCategoryData();
+
     super.initState();
   }
 
@@ -142,7 +143,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .12,
+
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
@@ -154,7 +155,7 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            width: MediaQuery.of(context).size.width * .56,
+            width: MediaQuery.of(context).size.width * .9,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -184,13 +185,13 @@ class _FaqCategoryListScreenState extends State<FaqCategoryListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // var response = await Get.to(() => CategoryAddScreen(
-                        //       isFromAdd: false,
-                        //       data: data,
-                        //     ));
-                        // if (response != null) {
-                        //   _getFaqCategoryWithoutLoading();
-                        // }
+                        var response = await Get.to(() => FaqCategoryAddScreen(
+                              isFromAdd: false,
+                              data: data,
+                            ));
+                        if (response != null) {
+                          _getFaqCategoryWithoutLoading();
+                        }
                       },
                       child: const Icon(
                         Icons.edit_square,

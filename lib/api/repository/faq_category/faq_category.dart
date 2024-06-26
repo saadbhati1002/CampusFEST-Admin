@@ -9,7 +9,7 @@ class FaqCategoryRepository {
     return await FaqCategoryNetwork.faqCategoryDelete(userID);
   }
 
-  Future<dynamic> addCategoryApiCall({
+  Future<dynamic> addFaqCategoryApiCall({
     String? title,
     int? status,
   }) async {
@@ -18,5 +18,14 @@ class FaqCategoryRepository {
       "status": status,
     };
     return await FaqCategoryNetwork.addFaqCategory(body);
+  }
+
+  Future<dynamic> updateFaqCategoryApiCall(
+      {String? title, int? status, String? faqCategoryID}) async {
+    final body = {
+      "title": title,
+      "status": status,
+    };
+    return await FaqCategoryNetwork.updateFaqCategory(body, faqCategoryID);
   }
 }
