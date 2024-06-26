@@ -10,6 +10,8 @@ class AppConstant {
   static const String imageUrl = 'https://app.campusfest.co/';
   static const String notificationUrl = "https://fcm.googleapis.com/fcm/send";
   static LatLng locationLatLong = const LatLng(28.7041, 77.1025);
+  static String googleMapApiKey = "AIzaSyDcr5WtDuAsJS2aZRe-5OTD39sZ6iUrHYk";
+
   static String currentAddress = "";
   static const String firebaseKey =
       "**********************************************************";

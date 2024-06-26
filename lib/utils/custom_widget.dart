@@ -16,15 +16,19 @@ textfield(
     TextEditingController? controller,
     String? Function(String?)? validator,
     bool? obstacle,
-    TextInputType? keyboardType}) {
+    TextInputType? keyboardType,
+    bool? multiLines}) {
   return Container(
-    height: 50,
+    alignment: Alignment.topLeft,
+    height: multiLines == true ? 150 : 50,
     width: Width,
     decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10), color: AppColors.whiteColor),
     child: TextFormField(
+      textAlign: TextAlign.start,
       keyboardType: keyboardType ?? TextInputType.text,
       obscureText: obstacle ?? false,
+      maxLines: multiLines == true ? 11 : 1,
       onTap: onTap,
       controller: controller,
       decoration: InputDecoration(

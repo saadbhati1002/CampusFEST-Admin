@@ -10,6 +10,7 @@ import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:event/model/common/common_model.dart';
+import 'package:event/screens/event/add_update/add_update_event_screen.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -76,6 +77,38 @@ class _EventListScreenState extends State<EventListScreen> {
             Navigator.pop(context, eventList.length);
           },
           title: "Event List",
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () async {
+            var response = await Get.to(
+              () => const AddUpdateEventScreen(
+                isFromAdd: true,
+              ),
+            );
+            if (response != null) {
+              _getEventWithoutLoading();
+            }
+          },
+          child: Container(
+              height: 38,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              decoration: BoxDecoration(
+                color: AppColors.appColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Add Event",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.whiteColor,
+                    ),
+                  ),
+                ],
+              )),
         ),
         body: Stack(
           children: [

@@ -70,6 +70,7 @@ dependencies:
   flutter_share: ^2.0.0
   flutter_html: ^3.0.0-alpha.5
   flutter_widget_from_html_core: any
+  html_editor_enhanced:
 
 dev_dependencies:
   flutter_test:
