@@ -2,6 +2,7 @@ import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
 import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
+import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
@@ -193,8 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     textColor: AppColors.whiteColor,
                     image: "assets/faq.png",
                     onTap: () async {
-                      var response =
-                          await Get.to(() => const CategoryListScreen());
+                      var response = await Get.to(() => const FaqListScreen());
                       if (response != null) {
                         dashboardData?.totalCategories = response;
                         setState(() {});
