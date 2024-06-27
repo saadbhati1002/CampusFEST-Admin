@@ -1,19 +1,19 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:event/api/network/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/faq/faq.dart';
+import 'package:event/api/repository/faq_category/faq_category.dart';
+import 'package:event/model/common/common_model.dart';
+import 'package:event/model/faq/faq_model.dart';
+import 'package:event/model/faq_category/faq_category_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class FaqAddScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final CategoryData? data;
+  final FaqData? data;
   const FaqAddScreen({super.key, this.data, this.isFromAdd});
 
   @override
@@ -21,25 +21,60 @@ class FaqAddScreen extends StatefulWidget {
 }
 
 class _FaqAddScreenState extends State<FaqAddScreen> {
-  TextEditingController titleController = TextEditingController();
+  TextEditingController questionController = TextEditingController();
+  TextEditingController answerController = TextEditingController();
+
   File? categoryImage, categoryCoverImage;
   bool isLoading = false;
-  String? categoryStatus;
+  String? faqStatus;
+  FaqCategoryData? selectedCategory;
+  List<FaqCategoryData> categoryList = [];
+
   @override
   void initState() {
+    _getCategoryData();
     _checkData();
     super.initState();
+  }
+
+  Future _getCategoryData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      FaqCategoryRes response =
+          await FaqCategoryRepository().getFaqCategoryListApiCall();
+      if (response.categories.isNotEmpty) {
+        categoryList = response.categories;
+        if (widget.isFromAdd == false) {
+          for (int i = 0; i < categoryList.length; i++) {
+            if (categoryList[i].id == widget.data!.catID) {
+              selectedCategory = categoryList[i];
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future _checkData() async {
     if (widget.isFromAdd == true) {
       return;
     }
-    if (widget.data!.title != null && widget.data!.title != "") {
-      titleController.text = widget.data!.title!;
+    if (widget.data!.question != null && widget.data!.question != "") {
+      questionController.text = widget.data!.question!;
+    }
+    if (widget.data!.answer != null && widget.data!.answer != "") {
+      answerController.text = widget.data!.answer!;
     }
     if (widget.data!.status != null && widget.data!.status != null) {
-      categoryStatus = widget.data!.status;
+      faqStatus = widget.data!.status;
     }
     setState(() {});
   }
@@ -66,8 +101,71 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: AppColors.greyColor,
+                      ),
+                      color: AppColors.whiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 3),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          dropdownColor: AppColors.whiteColor,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down_sharp,
+                            color: AppColors.greyColor,
+                          ),
+                          isExpanded: true,
+                          items: categoryList.map((FaqCategoryData value) {
+                            return DropdownMenuItem<FaqCategoryData>(
+                              value: value,
+                              child: Text(
+                                value.title ?? "",
+                              ),
+                            );
+                          }).toList(),
+                          style: const TextStyle(
+                            color: AppColors.greyColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          hint: Text(
+                            selectedCategory?.title ?? "Select Category",
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: selectedCategory == null
+                                  ? AppColors.greyColor
+                                  : AppColors.textColor,
+                              fontSize: 16,
+                              fontWeight: selectedCategory == null
+                                  ? FontWeight.w400
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            selectedCategory = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: textfield(
-                    controller: titleController,
+                    controller: questionController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
                     text: "Question",
@@ -79,7 +177,7 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: textfield(
-                    controller: titleController,
+                    controller: answerController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
                     text: "Answer",
@@ -130,20 +228,20 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           hint: Text(
-                            categoryStatus ?? "Status",
+                            faqStatus ?? "Status",
                             maxLines: 1,
                             style: TextStyle(
-                              color: categoryStatus == null
+                              color: faqStatus == null
                                   ? AppColors.greyColor
                                   : AppColors.textColor,
                               fontSize: 16,
-                              fontWeight: categoryStatus == null
+                              fontWeight: faqStatus == null
                                   ? FontWeight.w400
                                   : FontWeight.w500,
                             ),
                           ),
                           onChanged: (value) {
-                            categoryStatus = value;
+                            faqStatus = value;
                             setState(() {});
                           },
                         ),
@@ -159,7 +257,7 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (widget.isFromAdd == true) {
-                        _addCategory();
+                        _addFaq();
                       } else {
                         _updateCategory();
                       }
@@ -192,36 +290,36 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
     );
   }
 
-  Future _addCategory() async {
-    if (titleController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter title");
+  Future _addFaq() async {
+    if (selectedCategory == null) {
+      AppConstant.showToastMessage("Please select category");
       return;
     }
-    if (categoryStatus == null) {
+    if (questionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter question");
+      return;
+    }
+    if (answerController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter answer");
+      return;
+    }
+    if (faqStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-
     try {
       setState(() {
         isLoading = true;
       });
+      int status = faqStatus == "Publish" ? 1 : 0;
+      CommonRes response = await FaqRepository().addFaqApiCall(
+          status: status,
+          question: questionController.text.trim(),
+          answer: answerController.text.trim(),
+          catID: selectedCategory!.id);
 
-      int status = categoryStatus == "Publish" ? 1 : 0;
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-
-      var request = http.Request('POST',
-          Uri.parse(AppConstant.baseUrl + CategoryNetwork.addCategoryUrl));
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category added successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Faq added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -236,57 +334,38 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
   }
 
   Future _updateCategory() async {
-    if (titleController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter title");
+    if (selectedCategory == null) {
+      AppConstant.showToastMessage("Please select category");
       return;
     }
-    if (categoryStatus == null) {
+    if (questionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter question");
+      return;
+    }
+    if (answerController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter answer");
+      return;
+    }
+    if (faqStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    print(
-        "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}");
-    var request = http.Request(
-        'PUT',
-        Uri.parse(
-            "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}"));
-    int status = categoryStatus == "Publish" ? 1 : 0;
-    request.body =
-        '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-
-    if (categoryImage != null && categoryCoverImage != null) {
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-    } else {
-      if (categoryImage != null) {
-        List<int> imageBytes = categoryImage!.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image","cover_img":"" }''';
-      }
-      if (categoryCoverImage != null) {
-        List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-        String base64ImageCover = base64Encode(imageBytesCover);
-
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status,  "cover_img": "$base64ImageCover","img":""}''';
-      }
-    }
-
     try {
       setState(() {
         isLoading = true;
       });
+      int status = faqStatus == "Publish" ? 1 : 0;
 
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
+      CommonRes response = await FaqRepository().updateFaqApiCall(
+        status: status,
+        question: questionController.text.trim(),
+        answer: answerController.text.trim(),
+        catID: selectedCategory!.id,
+        faqID: widget.data!.id,
+      );
 
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category updated successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Faq updated successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
