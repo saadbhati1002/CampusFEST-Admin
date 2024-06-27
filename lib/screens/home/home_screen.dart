@@ -7,6 +7,7 @@ import 'package:event/screens/faq_category/faq_category_list.dart';
 import 'package:event/screens/gallery/gallery_list_screen.dart';
 import 'package:event/screens/pages/pages_list_screen.dart';
 import 'package:event/screens/sponsors/sponsor_list_screen.dart';
+import 'package:event/screens/total%20coupon/coupon_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -189,11 +190,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                    title: "Total Offers",
+                    title: "Total Coupon",
                     count: dashboardData?.totalOffers ?? "0",
                     backgroundColor: const Color(0xFF945AA3),
                     textColor: AppColors.whiteColor,
                     image: "assets/offer.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const CouponListScreen());
+                      if (response != null) {
+                        dashboardData?.totalEvent = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
