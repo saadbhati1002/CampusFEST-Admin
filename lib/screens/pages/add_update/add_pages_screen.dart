@@ -2,7 +2,7 @@ import 'package:event/api/repository/category/category.dart';
 import 'package:event/api/repository/faq_category/faq_category.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/model/faq_category/faq_category_model.dart';
-import 'package:event/screens/pages/add%20pagesList/Add_pages_list_screen.dart';
+import 'package:event/screens/pages/Add_pages_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
