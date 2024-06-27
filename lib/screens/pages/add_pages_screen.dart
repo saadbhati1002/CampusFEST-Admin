@@ -2,25 +2,24 @@ import 'package:event/api/repository/category/category.dart';
 import 'package:event/api/repository/faq_category/faq_category.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/model/faq_category/faq_category_model.dart';
-import 'package:event/screens/faq/faq%20add/faq_add_screen.dart';
+import 'package:event/screens/pages/add%20pagesList/Add_pages_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/show_progress_bar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class FaqListScreen extends StatefulWidget {
-  const FaqListScreen({super.key});
+class AddPagesScreen extends StatefulWidget {
+  const AddPagesScreen({super.key});
 
   @override
-  State<FaqListScreen> createState() => _FaqListScreenState();
+  State<AddPagesScreen> createState() => _AddPagesScreenState();
 }
 
-class _FaqListScreenState extends State<FaqListScreen> {
+class _AddPagesScreenState extends State<AddPagesScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
   List<FaqCategoryData> categoryList = [];
@@ -80,11 +79,11 @@ class _FaqListScreenState extends State<FaqListScreen> {
           onTap: () {
             Navigator.pop(context, categoryList.length);
           },
-          title: "FAQ",
+          title: "Add Pages",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
-            var response = await Get.to(() => const FaqAddScreen(
+            var response = await Get.to(() => const AddPagesListScreen(
                   isFromAdd: true,
                 ));
             if (response != null) {
@@ -102,7 +101,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Add Category",
+                    "Add Pages",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -162,8 +161,8 @@ class _FaqListScreenState extends State<FaqListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Question",
+                Text(
+                  "Title ",
                   // data.title ?? '',
                   style: TextStyle(
                     fontSize: 16,
@@ -171,8 +170,8 @@ class _FaqListScreenState extends State<FaqListScreen> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const Text(
-                  "Answer",
+                Text(
+                  "Description",
                   // data.title ?? '',
                   style: TextStyle(
                     fontSize: 16,

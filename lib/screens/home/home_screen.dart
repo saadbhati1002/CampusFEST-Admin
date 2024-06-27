@@ -4,6 +4,7 @@ import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
+import 'package:event/screens/pages/add_pages_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -228,6 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF23348C),
                     textColor: AppColors.whiteColor,
                     image: "assets/page.png",
+                    onTap: () async {
+                      var response = await Get.to(() => const AddPagesScreen());
+                      if (response != null) {
+                        dashboardData?.totalCategories = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,

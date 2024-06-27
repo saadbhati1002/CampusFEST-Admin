@@ -4,20 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:event/utils/Colors.dart';
 
-textfield(
-    {String? text,
-    suffix,
-    prefix,
-    Color? labelColor,
-    Function()? onTap,
-    fieldColor,
-    double? Width,
-    Height,
-    TextEditingController? controller,
-    String? Function(String?)? validator,
-    bool? obstacle,
-    TextInputType? keyboardType,
-    bool? multiLines}) {
+textfield({
+  String? text,
+  suffix,
+  prefix,
+  Color? labelColor,
+  Function()? onTap,
+  fieldColor,
+  double? Width,
+  Height,
+  TextEditingController? controller,
+  String? Function(String?)? validator,
+  bool? obstacle,
+  TextInputType? keyboardType,
+  bool? multiLines,
+}) {
   return Container(
     alignment: Alignment.topLeft,
     height: multiLines == true ? 150 : 50,
