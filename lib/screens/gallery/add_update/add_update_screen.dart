@@ -1,20 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:event/api/network/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/event/event.dart';
+import 'package:event/api/repository/gallery/gallery.dart';
+import 'package:event/model/common/common_model.dart';
+import 'package:event/model/event/event_model.dart';
+import 'package:event/model/gallery/gallery_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddGalleryScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final CategoryData? data;
+  final GalleryData? data;
   const AddGalleryScreen({super.key, this.data, this.isFromAdd});
 
   @override
@@ -22,25 +23,51 @@ class AddGalleryScreen extends StatefulWidget {
 }
 
 class _AddGalleryScreenState extends State<AddGalleryScreen> {
-  TextEditingController titleController = TextEditingController();
-  File? categoryImage, categoryCoverImage;
+  List<EventData> eventList = [];
+
+  File? galleryImage;
   bool isLoading = false;
-  String? categoryStatus;
+  String? galleryStatus;
+  EventData? selectedEvent;
   @override
   void initState() {
     _checkData();
+    _getEventData();
     super.initState();
+  }
+
+  Future _getEventData() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      EventRes response = await EventRepository().getEventListApiCall();
+      if (response.events.isNotEmpty) {
+        eventList = response.events;
+        if (widget.isFromAdd == false) {
+          for (int i = 0; i < eventList.length; i++) {
+            if (eventList[i].id == widget.data!.id) {
+              selectedEvent = eventList[i];
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   Future _checkData() async {
     if (widget.isFromAdd == true) {
       return;
     }
-    if (widget.data!.title != null && widget.data!.title != "") {
-      titleController.text = widget.data!.title!;
-    }
+
     if (widget.data!.status != null && widget.data!.status != null) {
-      categoryStatus = widget.data!.status;
+      galleryStatus = widget.data!.status;
     }
     setState(() {});
   }
@@ -53,7 +80,7 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
         onTap: () {
           Navigator.pop(context);
         },
-        title: "Gallery Image Management",
+        title: "Add Gallery Image",
       ),
       body: Stack(
         children: [
@@ -64,6 +91,69 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: AppColors.greyColor,
+                      ),
+                      color: AppColors.whiteColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 3),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          dropdownColor: AppColors.whiteColor,
+                          icon: const Icon(
+                            Icons.keyboard_arrow_down_sharp,
+                            color: AppColors.greyColor,
+                          ),
+                          isExpanded: true,
+                          items: eventList.map((EventData value) {
+                            return DropdownMenuItem<EventData>(
+                              value: value,
+                              child: Text(
+                                value.title ?? "",
+                              ),
+                            );
+                          }).toList(),
+                          style: const TextStyle(
+                            color: AppColors.greyColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          hint: Text(
+                            selectedEvent?.title ?? "Select Event",
+                            maxLines: 1,
+                            style: TextStyle(
+                              color: selectedEvent == null
+                                  ? AppColors.greyColor
+                                  : AppColors.textColor,
+                              fontSize: 16,
+                              fontWeight: selectedEvent == null
+                                  ? FontWeight.w400
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                          onChanged: (value) {
+                            selectedEvent = value;
+                            setState(() {});
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -107,20 +197,20 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           hint: Text(
-                            categoryStatus ?? "Status",
+                            galleryStatus ?? "Status",
                             maxLines: 1,
                             style: TextStyle(
-                              color: categoryStatus == null
+                              color: galleryStatus == null
                                   ? AppColors.greyColor
                                   : AppColors.textColor,
                               fontSize: 16,
-                              fontWeight: categoryStatus == null
+                              fontWeight: galleryStatus == null
                                   ? FontWeight.w400
                                   : FontWeight.w500,
                             ),
                           ),
                           onChanged: (value) {
-                            categoryStatus = value;
+                            galleryStatus = value;
                             setState(() {});
                           },
                         ),
@@ -132,9 +222,9 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 commonRow(
-                    imageFile: categoryImage,
+                    imageFile: galleryImage,
                     index: 1,
-                    title: 'Category Image',
+                    title: 'Gallery Image',
                     imagePath: widget.data?.img ?? ''),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
@@ -273,51 +363,39 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
     var image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
       if (index == 1) {
-        categoryImage = File(image.path);
-      } else if (index == 2) {
-        categoryCoverImage = File(image.path);
-      }
+        galleryImage = File(image.path);
+      } else if (index == 2) {}
       setState(() {});
     }
   }
 
   Future _addCategory() async {
-    if (titleController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter title");
+    if (selectedEvent == null) {
+      AppConstant.showToastMessage("Please select event");
       return;
     }
-    if (categoryStatus == null) {
+    if (galleryStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    if (categoryImage == null) {
+    if (galleryImage == null) {
       AppConstant.showToastMessage("Please select image");
       return;
     }
-    if (categoryCoverImage == null) {
-      AppConstant.showToastMessage("Please select cover image");
-      return;
-    }
+
     try {
       setState(() {
         isLoading = true;
       });
 
-      int status = categoryStatus == "Publish" ? 1 : 0;
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
+      int status = galleryStatus == "Publish" ? 1 : 0;
+      List<int> imageBytes = galleryImage!.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
+      CommonRes response = await GalleryRepository().addGalleryApiCall(
+          status: status, eventID: selectedEvent!.id, img: base64Image);
 
-      var request = http.Request('POST',
-          Uri.parse(AppConstant.baseUrl + CategoryNetwork.addCategoryUrl));
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category added successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Gallery image added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -332,60 +410,38 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
   }
 
   Future _updateCategory() async {
-    if (titleController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter title");
+    if (selectedEvent == null) {
+      AppConstant.showToastMessage("Please select event");
       return;
     }
-    if (categoryStatus == null) {
+    if (galleryStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
+    String? base64Image;
+    int status = galleryStatus == "Publish" ? 1 : 0;
 
-    var request = http.Request(
-        'PUT',
-        Uri.parse(
-            "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}"));
-    int status = categoryStatus == "Publish" ? 1 : 0;
-    request.body =
-        '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-
-    if (categoryImage != null && categoryCoverImage != null) {
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-    } else {
-      if (categoryImage != null) {
-        List<int> imageBytes = categoryImage!.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image","cover_img":"" }''';
-      }
-      if (categoryCoverImage != null) {
-        List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-        String base64ImageCover = base64Encode(imageBytesCover);
-
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status,  "cover_img": "$base64ImageCover","img":""}''';
-      }
+    if (galleryImage != null) {
+      List<int> imageBytes = galleryImage!.readAsBytesSync();
+      base64Image = base64Encode(imageBytes);
     }
+    CommonRes response = await GalleryRepository().updateGalleryApiCall(
+      status: status,
+      eventID: selectedEvent!.id,
+      img: base64Image,
+      galleryID: widget.data!.id,
+    );
 
+    if (response.responseCode == "200") {
+      AppConstant.showToastMessage("Gallery image updated successfully");
+      Navigator.pop(context, 1);
+    } else {
+      AppConstant.showToastMessage("Getting some error please try again");
+    }
     try {
       setState(() {
         isLoading = true;
       });
-
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category updated successfully");
-        Navigator.pop(context, 1);
-      } else {
-        AppConstant.showToastMessage("Getting some error please try again");
-      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {
