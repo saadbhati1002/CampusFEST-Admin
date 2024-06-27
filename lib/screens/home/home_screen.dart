@@ -6,6 +6,7 @@ import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
 import 'package:event/screens/gallery/gallery_list_screen.dart';
 import 'package:event/screens/pages/pages_list_screen.dart';
+import 'package:event/screens/sponsors/sponsor_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -165,6 +166,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF5451F9),
                     textColor: AppColors.whiteColor,
                     image: "assets/tickets.png",
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .015,
+                  ),
+                  dashboardBox(
+                    title: "Events Sponsors",
+                    count: dashboardData?.totalTickets ?? "0",
+                    backgroundColor: const Color.fromARGB(255, 69, 24, 59),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/gallery.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const SponsorsListScreen());
+                      if (response != null) {
+                        dashboardData?.totalEvent = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
