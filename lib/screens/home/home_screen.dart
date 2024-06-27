@@ -4,8 +4,7 @@ import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
-import 'package:event/screens/gallery/gallery_list_screen.dart';
-import 'package:event/screens/pages/add_update/add_pages_screen.dart';
+import 'package:event/screens/pages/pages_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -206,7 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () async {
                       var response = await Get.to(() => const FaqListScreen());
                       if (response != null) {
-                        dashboardData?.totalCategories = response;
+                        dashboardData?.totalFaqs = response;
                         setState(() {});
                       }
                     },
@@ -239,9 +238,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     textColor: AppColors.whiteColor,
                     image: "assets/page.png",
                     onTap: () async {
-                      var response = await Get.to(() => const AddPagesScreen());
+                      var response =
+                          await Get.to(() => const PagesListScreen());
                       if (response != null) {
-                        dashboardData?.totalCategories = response;
+                        dashboardData?.totalPages = response;
                         setState(() {});
                       }
                     },

@@ -1,19 +1,17 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:event/api/network/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/page/page.dart';
+import 'package:event/model/common/common_model.dart';
+import 'package:event/model/page/page_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class AddPagesListScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final CategoryData? data;
+  final PagesData? data;
   const AddPagesListScreen({super.key, this.data, this.isFromAdd});
 
   @override
@@ -25,7 +23,7 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
   TextEditingController descriptionController = TextEditingController();
   File? categoryImage, categoryCoverImage;
   bool isLoading = false;
-  String? categoryStatus;
+  String? pageStatus;
   @override
   void initState() {
     _checkData();
@@ -39,8 +37,11 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
     if (widget.data!.title != null && widget.data!.title != "") {
       titleController.text = widget.data!.title!;
     }
+    if (widget.data!.description != null && widget.data!.description != "") {
+      descriptionController.text = widget.data!.description!;
+    }
     if (widget.data!.status != null && widget.data!.status != null) {
-      categoryStatus = widget.data!.status;
+      pageStatus = widget.data!.status;
     }
     setState(() {});
   }
@@ -65,41 +66,13 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.04,
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "Page Title",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: textfield(
                     controller: titleController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
-                    text: "Enter category Name",
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "Page Description",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    text: "Enter Page ",
                   ),
                 ),
                 SizedBox(
@@ -113,20 +86,6 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
                     text: "Enter Description",
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "Page Status",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.blackColor,
-                      fontWeight: FontWeight.w600,
-                    ),
                   ),
                 ),
                 SizedBox(
@@ -174,20 +133,20 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           hint: Text(
-                            categoryStatus ?? "Select Status",
+                            pageStatus ?? "Select Status",
                             maxLines: 1,
                             style: TextStyle(
-                              color: categoryStatus == null
+                              color: pageStatus == null
                                   ? AppColors.greyColor
                                   : AppColors.textColor,
                               fontSize: 16,
-                              fontWeight: categoryStatus == null
+                              fontWeight: pageStatus == null
                                   ? FontWeight.w400
                                   : FontWeight.w500,
                             ),
                           ),
                           onChanged: (value) {
-                            categoryStatus = value;
+                            pageStatus = value;
                             setState(() {});
                           },
                         ),
@@ -203,9 +162,9 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
                   child: GestureDetector(
                     onTap: () {
                       if (widget.isFromAdd == true) {
-                        _addCategory();
+                        _addPage();
                       } else {
-                        _updateCategory();
+                        _updatePage();
                       }
                     },
                     child: Container(
@@ -236,12 +195,16 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
     );
   }
 
-  Future _addCategory() async {
+  Future _addPage() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (descriptionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter description");
+      return;
+    }
+    if (pageStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
@@ -250,22 +213,14 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
       setState(() {
         isLoading = true;
       });
+      int status = pageStatus == "Publish" ? 1 : 0;
+      CommonRes response = await PageRepository().addPageApiCall(
+          status: status,
+          title: titleController.text.trim(),
+          description: descriptionController.text.trim());
 
-      int status = categoryStatus == "Publish" ? 1 : 0;
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-
-      var request = http.Request('POST',
-          Uri.parse(AppConstant.baseUrl + CategoryNetwork.addCategoryUrl));
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category added successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Page added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -279,58 +234,33 @@ class _AddPagesListScreenState extends State<AddPagesListScreen> {
     }
   }
 
-  Future _updateCategory() async {
+  Future _updatePage() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (descriptionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter description");
+      return;
+    }
+    if (pageStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    print(
-        "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}");
-    var request = http.Request(
-        'PUT',
-        Uri.parse(
-            "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}"));
-    int status = categoryStatus == "Publish" ? 1 : 0;
-    request.body =
-        '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-
-    if (categoryImage != null && categoryCoverImage != null) {
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-    } else {
-      if (categoryImage != null) {
-        List<int> imageBytes = categoryImage!.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image","cover_img":"" }''';
-      }
-      if (categoryCoverImage != null) {
-        List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-        String base64ImageCover = base64Encode(imageBytesCover);
-
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status,  "cover_img": "$base64ImageCover","img":""}''';
-      }
-    }
-
     try {
       setState(() {
         isLoading = true;
       });
+      int status = pageStatus == "Publish" ? 1 : 0;
+      CommonRes response = await PageRepository().updatePageApiCall(
+        status: status,
+        title: titleController.text.trim(),
+        description: descriptionController.text.trim(),
+        pageID: widget.data!.id,
+      );
 
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category updated successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Page updated successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");

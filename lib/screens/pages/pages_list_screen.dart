@@ -1,8 +1,7 @@
-import 'package:event/api/repository/category/category.dart';
-import 'package:event/api/repository/faq_category/faq_category.dart';
+import 'package:event/api/repository/page/page.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/model/faq_category/faq_category_model.dart';
-import 'package:event/screens/pages/Add_pages_list_screen.dart';
+import 'package:event/model/page/page_model.dart';
+import 'package:event/screens/pages/add_update/add_pages_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
@@ -10,34 +9,32 @@ import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
-class AddPagesScreen extends StatefulWidget {
-  const AddPagesScreen({super.key});
+class PagesListScreen extends StatefulWidget {
+  const PagesListScreen({super.key});
 
   @override
-  State<AddPagesScreen> createState() => _AddPagesScreenState();
+  State<PagesListScreen> createState() => _PagesListScreenState();
 }
 
-class _AddPagesScreenState extends State<AddPagesScreen> {
+class _PagesListScreenState extends State<PagesListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<FaqCategoryData> categoryList = [];
+  List<PagesData> pagesList = [];
   @override
   void initState() {
-    _getFaqCategoryData();
+    _getPagesData();
     super.initState();
   }
 
-  Future _getFaqCategoryData() async {
+  Future _getPagesData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      FaqCategoryRes response =
-          await FaqCategoryRepository().getFaqCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      PageRes response = await PageRepository().getPageListApiCall();
+      if (response.pages.isNotEmpty) {
+        pagesList = response.pages;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -50,10 +47,9 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
 
   Future _getFaqCategoryWithoutLoading() async {
     try {
-      FaqCategoryRes response =
-          await FaqCategoryRepository().getFaqCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      PageRes response = await PageRepository().getPageListApiCall();
+      if (response.pages.isNotEmpty) {
+        pagesList = response.pages;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -65,7 +61,7 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, categoryList.length);
+    Navigator.pop(context, pagesList.length);
     return false;
   }
 
@@ -77,9 +73,9 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, categoryList.length);
+            Navigator.pop(context, pagesList.length);
           },
-          title: "Add Pages",
+          title: "Pages Management",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
@@ -115,13 +111,12 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: categoryList.length,
+                    itemCount: pagesList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return categoryWidget(
-                          data: categoryList[index], index: index);
+                      return pageWidget(data: pagesList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -140,7 +135,7 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
     );
   }
 
-  Widget categoryWidget({FaqCategoryData? data, int? index}) {
+  Widget pageWidget({PagesData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -162,26 +157,25 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Title ",
-                  // data.title ?? '',
-                  style: TextStyle(
+                  data?.title ?? '',
+                  maxLines: 1,
+                  style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  "Description",
-                  // data.title ?? '',
-                  style: TextStyle(
-                    fontSize: 16,
+                  data!.description ?? '',
+                  maxLines: 3,
+                  style: const TextStyle(
+                    fontSize: 14,
                     color: AppColors.blackColor,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 Text(
-                  "status",
-                  // 'Status: ${data.status}',
+                  'Status: ${data.status}',
                   maxLines: 2,
                   style: const TextStyle(
                     fontSize: 12,
@@ -197,13 +191,13 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // var response = await Get.to(() => CategoryAddScreen(
-                        //       isFromAdd: false,
-                        //       data: data,
-                        //     ));
-                        // if (response != null) {
-                        //   _getFaqCategoryWithoutLoading();
-                        // }
+                        var response = await Get.to(() => AddPagesListScreen(
+                              isFromAdd: false,
+                              data: data,
+                            ));
+                        if (response != null) {
+                          _getFaqCategoryWithoutLoading();
+                        }
                       },
                       child: const Icon(
                         Icons.edit_square,
@@ -216,7 +210,7 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _categoryDelete(index: index);
+                        _pageDelete(index: index);
                       },
                       child: const Icon(
                         Icons.delete,
@@ -234,18 +228,18 @@ class _AddPagesScreenState extends State<AddPagesScreen> {
     );
   }
 
-  Future _categoryDelete({int? index}) async {
+  Future _pageDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
-        userID: categoryList[index!].id,
+      CommonRes response = await PageRepository().pageDeleteApiCall(
+        pageID: pagesList[index!].id,
       );
       if (response.responseCode == "200") {
-        categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        pagesList.removeAt(index);
+        AppConstant.showToastMessage("Page deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }
