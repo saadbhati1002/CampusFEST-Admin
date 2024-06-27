@@ -1,7 +1,6 @@
-import 'package:event/api/repository/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/gallery/gallery.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/screens/category/add_update/category_add_screen.dart';
+import 'package:event/model/gallery/gallery_model.dart';
 import 'package:event/screens/gallery/add_update/add_update_screen.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -12,7 +11,6 @@ import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class GalleryListScreen extends StatefulWidget {
   const GalleryListScreen({super.key});
@@ -24,22 +22,21 @@ class GalleryListScreen extends StatefulWidget {
 class _GalleryListScreenState extends State<GalleryListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<CategoryData> categoryList = [];
+  List<GalleryData> galleryList = [];
   @override
   void initState() {
-    _getCategoryData();
+    _getGalleryData();
     super.initState();
   }
 
-  Future _getCategoryData() async {
+  Future _getGalleryData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      GalleryRes response = await GalleryRepository().getGalleryListApiCall();
+      if (response.gallery.isNotEmpty) {
+        galleryList = response.gallery;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -50,12 +47,11 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
     }
   }
 
-  Future _getCategoryWithoutLoading() async {
+  Future _getGalleryWithoutLoading() async {
     try {
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      GalleryRes response = await GalleryRepository().getGalleryListApiCall();
+      if (response.gallery.isNotEmpty) {
+        galleryList = response.gallery;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -67,7 +63,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, categoryList.length);
+    Navigator.pop(context, galleryList.length);
     return false;
   }
 
@@ -79,9 +75,9 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, categoryList.length);
+            Navigator.pop(context, galleryList.length);
           },
-          title: "Add Gallery Image",
+          title: "Gallery Image Add",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
@@ -89,7 +85,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
                   isFromAdd: true,
                 ));
             if (response != null) {
-              _getCategoryWithoutLoading();
+              _getGalleryWithoutLoading();
             }
           },
           child: Container(
@@ -117,13 +113,13 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: categoryList.length,
+                    itemCount: galleryList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return categoryWidget(
-                          data: categoryList[index], index: index);
+                      return galleryWidget(
+                          data: galleryList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -142,7 +138,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
     );
   }
 
-  Widget categoryWidget({CategoryData? data, int? index}) {
+  Widget galleryWidget({GalleryData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -180,8 +176,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Select Event",
-                  // data.title ?? '',
+                  data.eventName ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
@@ -189,8 +184,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
                   ),
                 ),
                 Text(
-                  "Gallery Image Status",
-                  // 'Status: ${data.status}',
+                  'Status: ${data.status}',
                   maxLines: 2,
                   style: const TextStyle(
                     fontSize: 12,
@@ -206,12 +200,12 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        var response = await Get.to(() => CategoryAddScreen(
+                        var response = await Get.to(() => AddGalleryScreen(
                               isFromAdd: false,
                               data: data,
                             ));
                         if (response != null) {
-                          _getCategoryWithoutLoading();
+                          _getGalleryWithoutLoading();
                         }
                       },
                       child: const Icon(
@@ -225,7 +219,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _categoryDelete(index: index);
+                        _galleryDelete(index: index);
                       },
                       child: const Icon(
                         Icons.delete,
@@ -243,18 +237,18 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
     );
   }
 
-  Future _categoryDelete({int? index}) async {
+  Future _galleryDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
-        userID: categoryList[index!].id,
+      CommonRes response = await GalleryRepository().galleryDeleteApiCall(
+        galleryID: galleryList[index!].id,
       );
       if (response.responseCode == "200") {
-        categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        galleryList.removeAt(index);
+        AppConstant.showToastMessage("Gallery image deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       var response =
                           await Get.to(() => const GalleryListScreen());
                       if (response != null) {
-                        dashboardData?.totalCategories = response;
+                        dashboardData?.totalGalleryImages = response;
                         setState(() {});
                       }
                     },
