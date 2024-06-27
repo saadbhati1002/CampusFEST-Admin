@@ -4,6 +4,7 @@ import 'package:event/screens/category/category_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
+import 'package:event/screens/gallery/gallery_list_screen.dart';
 import 'package:event/screens/pages/pages_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
