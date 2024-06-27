@@ -1,18 +1,14 @@
-import 'package:event/api/repository/category/category.dart';
-import 'package:event/api/repository/faq_category/faq_category.dart';
+import 'package:event/api/repository/faq/faq.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/model/faq_category/faq_category_model.dart';
-import 'package:event/screens/faq/faq%20add/faq_add_screen.dart';
-import 'package:event/screens/faq_category/add_update/faq_category_add_screen.dart';
+import 'package:event/model/faq/faq_model.dart';
+import 'package:event/screens/faq/add_update/faq_add_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/show_progress_bar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class FaqListScreen extends StatefulWidget {
   const FaqListScreen({super.key});
@@ -24,22 +20,21 @@ class FaqListScreen extends StatefulWidget {
 class _FaqListScreenState extends State<FaqListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<FaqCategoryData> categoryList = [];
+  List<FaqData> faqList = [];
   @override
   void initState() {
-    _getFaqCategoryData();
+    _getFaqData();
     super.initState();
   }
 
-  Future _getFaqCategoryData() async {
+  Future _getFaqData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      FaqCategoryRes response =
-          await FaqCategoryRepository().getFaqCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      FaqRes response = await FaqRepository().getFaqListApiCall();
+      if (response.faq.isNotEmpty) {
+        faqList = response.faq;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -52,10 +47,9 @@ class _FaqListScreenState extends State<FaqListScreen> {
 
   Future _getFaqCategoryWithoutLoading() async {
     try {
-      FaqCategoryRes response =
-          await FaqCategoryRepository().getFaqCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      FaqRes response = await FaqRepository().getFaqListApiCall();
+      if (response.faq.isNotEmpty) {
+        faqList = response.faq;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -67,7 +61,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, categoryList.length);
+    Navigator.pop(context, faqList.length);
     return false;
   }
 
@@ -79,7 +73,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, categoryList.length);
+            Navigator.pop(context, faqList.length);
           },
           title: "FAQ",
         ),
@@ -103,7 +97,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Add Category",
+                    "Add Faq",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -117,13 +111,12 @@ class _FaqListScreenState extends State<FaqListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: categoryList.length,
+                    itemCount: faqList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return categoryWidget(
-                          data: categoryList[index], index: index);
+                      return faqWidget(data: faqList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -142,7 +135,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
     );
   }
 
-  Widget categoryWidget({FaqCategoryData? data, int? index}) {
+  Widget faqWidget({FaqData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -163,27 +156,26 @@ class _FaqListScreenState extends State<FaqListScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  "Question",
-                  // data.title ?? '',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const Text(
-                  "Answer",
-                  // data.title ?? '',
-                  style: TextStyle(
+                Text(
+                  data!.question ?? '',
+                  maxLines: 2,
+                  style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  "status",
-                  // 'Status: ${data.status}',
+                  data.answer ?? '',
+                  maxLines: 4,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.blackColor,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                Text(
+                  'Status: ${data.status}',
                   maxLines: 2,
                   style: const TextStyle(
                     fontSize: 12,
@@ -199,13 +191,13 @@ class _FaqListScreenState extends State<FaqListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        // var response = await Get.to(() => CategoryAddScreen(
-                        //       isFromAdd: false,
-                        //       data: data,
-                        //     ));
-                        // if (response != null) {
-                        //   _getFaqCategoryWithoutLoading();
-                        // }
+                        var response = await Get.to(() => FaqAddScreen(
+                              isFromAdd: false,
+                              data: data,
+                            ));
+                        if (response != null) {
+                          _getFaqCategoryWithoutLoading();
+                        }
                       },
                       child: const Icon(
                         Icons.edit_square,
@@ -218,7 +210,7 @@ class _FaqListScreenState extends State<FaqListScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _categoryDelete(index: index);
+                        _faqDelete(index: index);
                       },
                       child: const Icon(
                         Icons.delete,
@@ -236,18 +228,18 @@ class _FaqListScreenState extends State<FaqListScreen> {
     );
   }
 
-  Future _categoryDelete({int? index}) async {
+  Future _faqDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
-        userID: categoryList[index!].id,
+      CommonRes response = await FaqRepository().faqDeleteApiCall(
+        userID: faqList[index!].id,
       );
       if (response.responseCode == "200") {
-        categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        faqList.removeAt(index);
+        AppConstant.showToastMessage("Faq deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }
