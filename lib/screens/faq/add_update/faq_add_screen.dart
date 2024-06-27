@@ -70,6 +70,9 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
     if (widget.data!.question != null && widget.data!.question != "") {
       questionController.text = widget.data!.question!;
     }
+    if (widget.data!.answer != null && widget.data!.answer != "") {
+      answerController.text = widget.data!.answer!;
+    }
     if (widget.data!.status != null && widget.data!.status != null) {
       faqStatus = widget.data!.status;
     }
@@ -330,5 +333,49 @@ class _FaqAddScreenState extends State<FaqAddScreen> {
     }
   }
 
-  Future _updateCategory() async {}
+  Future _updateCategory() async {
+    if (selectedCategory == null) {
+      AppConstant.showToastMessage("Please select category");
+      return;
+    }
+    if (questionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter question");
+      return;
+    }
+    if (answerController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter answer");
+      return;
+    }
+    if (faqStatus == null) {
+      AppConstant.showToastMessage("Please select status");
+      return;
+    }
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      int status = faqStatus == "Publish" ? 1 : 0;
+
+      CommonRes response = await FaqRepository().updateFaqApiCall(
+        status: status,
+        question: questionController.text.trim(),
+        answer: answerController.text.trim(),
+        catID: selectedCategory!.id,
+        faqID: widget.data!.id,
+      );
+
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Faq updated successfully");
+        Navigator.pop(context, 1);
+      } else {
+        AppConstant.showToastMessage("Getting some error please try again");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 }

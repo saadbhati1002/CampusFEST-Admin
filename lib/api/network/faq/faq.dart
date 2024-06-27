@@ -7,8 +7,7 @@ class FaqNetwork {
   static const String faqListUrl = 'e_admin_get_faq.php';
   static const String faqDeleteUrl = 'e_admin_delete_faq.php?faq_id=';
   static const String addFaqUrl = 'e_admin_add_faq.php';
-  static const String updateFaqCategoryUrl =
-      'e_admin_faq_category_update.php?category_id=';
+  static const String updateFaqUrl = 'e_admin_update_faq.php?faq_id=';
 
   static Future<dynamic> getFaqList() async {
     final result = await httpManager.get(
@@ -32,9 +31,9 @@ class FaqNetwork {
     return response;
   }
 
-  static Future<dynamic> updateFaqCategory(params, faqCategoryId) async {
-    final result = await httpManager.put(
-        url: "$updateFaqCategoryUrl$faqCategoryId", data: params);
+  static Future<dynamic> updateFaq(params, faqCategoryId) async {
+    final result =
+        await httpManager.put(url: "$updateFaqUrl$faqCategoryId", data: params);
 
     CommonRes response = CommonRes.fromJson(result);
     return response;

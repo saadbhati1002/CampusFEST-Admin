@@ -19,17 +19,23 @@ class FaqRepository {
       "fid": catID,
       "question": question,
       "answer": answer,
-      "status": 1
+      "status": status
     };
     return await FaqNetwork.addFaq(body);
   }
 
-  Future<dynamic> updateFaqCategoryApiCall(
-      {String? title, int? status, String? faqCategoryID}) async {
+  Future<dynamic> updateFaqApiCall(
+      {String? question,
+      String? answer,
+      String? catID,
+      int? status,
+      faqID}) async {
     final body = {
-      "title": title,
-      "status": status,
+      "fid": catID,
+      "question": question,
+      "answer": answer,
+      "status": status
     };
-    return await FaqNetwork.updateFaqCategory(body, faqCategoryID);
+    return await FaqNetwork.updateFaq(body, faqID);
   }
 }
