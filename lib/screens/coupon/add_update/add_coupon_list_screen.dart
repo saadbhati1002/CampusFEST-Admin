@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:event/api/network/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/coupon/coupon.dart';
+import 'package:event/model/common/common_model.dart';
+import 'package:event/model/coupon/coupon_model.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/utils/custom_widget.dart';
@@ -11,12 +11,12 @@ import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:intl/intl.dart';
 
 class AddCouponListScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final CategoryData? data;
+  final CouponData? data;
   const AddCouponListScreen({super.key, this.data, this.isFromAdd});
 
   @override
@@ -27,13 +27,14 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController subtitleController = TextEditingController();
   TextEditingController couponCodeController = TextEditingController();
-  TextEditingController eventDateController = TextEditingController();
+  TextEditingController couponDateController = TextEditingController();
   TextEditingController minOrderAmountController = TextEditingController();
   TextEditingController couponValueController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
-  File? categoryImage, categoryCoverImage;
+  File? couponImage;
   bool isLoading = false;
-  String? categoryStatus;
+  String? couponStatus;
   @override
   void initState() {
     _checkData();
@@ -47,9 +48,28 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
     if (widget.data!.title != null && widget.data!.title != "") {
       titleController.text = widget.data!.title!;
     }
-    if (widget.data!.status != null && widget.data!.status != null) {
-      categoryStatus = widget.data!.status;
+    if (widget.data!.subtitle != null && widget.data!.subtitle != "") {
+      subtitleController.text = widget.data!.subtitle!;
     }
+    if (widget.data!.coupon != null && widget.data!.coupon != "") {
+      couponCodeController.text = widget.data!.coupon!;
+    }
+    if (widget.data!.couponAmount != null && widget.data!.couponAmount != "") {
+      couponValueController.text = widget.data!.couponAmount!;
+    }
+    if (widget.data!.miniumAmount != null && widget.data!.miniumAmount != "") {
+      minOrderAmountController.text = widget.data!.miniumAmount!;
+    }
+    if (widget.data!.description != null && widget.data!.description != "") {
+      descriptionController.text = widget.data!.description!;
+    }
+    if (widget.data!.endDate != null && widget.data!.endDate != "") {
+      couponDateController.text = widget.data!.endDate!;
+    }
+    if (widget.data!.status != null && widget.data!.status != null) {
+      couponStatus = widget.data!.status;
+    }
+
     setState(() {});
   }
 
@@ -117,7 +137,7 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
                       _selectDate(context);
                       FocusManager.instance.primaryFocus?.unfocus();
                     },
-                    controller: eventDateController,
+                    controller: couponDateController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
                     text: "Coupon Expiry Date",
@@ -172,20 +192,20 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                           hint: Text(
-                            categoryStatus ?? "Coupon Status",
+                            couponStatus ?? "Coupon Status",
                             maxLines: 1,
                             style: TextStyle(
-                              color: categoryStatus == null
+                              color: couponStatus == null
                                   ? AppColors.greyColor
                                   : AppColors.textColor,
                               fontSize: 16,
-                              fontWeight: categoryStatus == null
+                              fontWeight: couponStatus == null
                                   ? FontWeight.w400
                                   : FontWeight.w500,
                             ),
                           ),
                           onChanged: (value) {
-                            categoryStatus = value;
+                            couponStatus = value;
                             setState(() {});
                           },
                         ),
@@ -202,6 +222,7 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
                     controller: minOrderAmountController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
+                    keyboardType: TextInputType.number,
                     text: "Coupon Min Order Amount",
                   ),
                 ),
@@ -214,25 +235,39 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
                     controller: couponValueController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
+                    keyboardType: TextInputType.number,
                     text: "Coupon Value",
                   ),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: textfield(
+                    multiLines: true,
+                    controller: descriptionController,
+                    fieldColor: AppColors.bgColor,
+                    labelColor: AppColors.greyColor,
+                    text: "Description",
+                  ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
                 commonRow(
-                    imageFile: categoryImage,
+                    imageFile: couponImage,
                     index: 1,
-                    title: 'Category Image',
+                    title: 'Coupon Image',
                     imagePath: widget.data?.img ?? ''),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
                   child: GestureDetector(
                     onTap: () {
                       if (widget.isFromAdd == true) {
-                        _addCategory();
+                        _addCoupon();
                       } else {
-                        _updateCategory();
+                        _updateCoupon();
                       }
                     },
                     child: Container(
@@ -253,6 +288,9 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
                       ),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.02,
                 ),
               ],
             ),
@@ -362,51 +400,73 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
     var image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
       if (index == 1) {
-        categoryImage = File(image.path);
+        couponImage = File(image.path);
       } else if (index == 2) {
-        categoryCoverImage = File(image.path);
+        couponImage = File(image.path);
       }
       setState(() {});
     }
   }
 
-  Future _addCategory() async {
+  Future _addCoupon() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (titleController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter subtitle");
+      return;
+    }
+    if (couponCodeController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter coupon code");
+      return;
+    }
+    if (couponDateController.text.isEmpty) {
+      AppConstant.showToastMessage("Please select expire date");
+      return;
+    }
+    if (couponStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    if (categoryImage == null) {
+    if (minOrderAmountController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter minium order amount");
+      return;
+    }
+    if (couponValueController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter order amount");
+      return;
+    }
+    if (descriptionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter description");
+      return;
+    }
+    if (couponImage == null) {
       AppConstant.showToastMessage("Please select image");
       return;
     }
-    if (categoryCoverImage == null) {
-      AppConstant.showToastMessage("Please select cover image");
-      return;
-    }
+
     try {
       setState(() {
         isLoading = true;
       });
-
-      int status = categoryStatus == "Publish" ? 1 : 0;
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
+      int status = couponStatus == "Publish" ? 1 : 0;
+      List<int> imageBytes = couponImage!.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
+      CommonRes response = await CouponRepository().addCouponApiCall(
+        status: status,
+        title: titleController.text.trim(),
+        img: base64Image,
+        couponAmount: couponValueController.text.trim(),
+        couponCode: couponCodeController.text.trim().toUpperCase(),
+        description: descriptionController.text.trim(),
+        expireData: couponDateController.text.toString(),
+        miniumOrderAMount: minOrderAmountController.text.trim(),
+        subtitle: subtitleController.text.trim(),
+      );
 
-      var request = http.Request('POST',
-          Uri.parse(AppConstant.baseUrl + CategoryNetwork.addCategoryUrl));
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category added successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Coupon added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -420,57 +480,65 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
     }
   }
 
-  Future _updateCategory() async {
+  Future _updateCoupon() async {
     if (titleController.text.isEmpty) {
       AppConstant.showToastMessage("Please enter title");
       return;
     }
-    if (categoryStatus == null) {
+    if (titleController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter subtitle");
+      return;
+    }
+    if (couponCodeController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter coupon code");
+      return;
+    }
+    if (couponDateController.text.isEmpty) {
+      AppConstant.showToastMessage("Please select expire date");
+      return;
+    }
+    if (couponStatus == null) {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-
-    var request = http.Request(
-        'PUT',
-        Uri.parse(
-            "${AppConstant.baseUrl}${CategoryNetwork.updateCategoryUrl}${widget.data!.id}"));
-    int status = categoryStatus == "Publish" ? 1 : 0;
-    request.body =
-        '''{"title": "${titleController.text.toString()}","status":$status,"img":"","cover_img":""}''';
-
-    if (categoryImage != null && categoryCoverImage != null) {
-      List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-      String base64ImageCover = base64Encode(imageBytesCover);
-      List<int> imageBytes = categoryImage!.readAsBytesSync();
-      String base64Image = base64Encode(imageBytes);
-      request.body =
-          '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image", "cover_img": "$base64ImageCover"}''';
-    } else {
-      if (categoryImage != null) {
-        List<int> imageBytes = categoryImage!.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status, "img": "$base64Image","cover_img":"" }''';
-      }
-      if (categoryCoverImage != null) {
-        List<int> imageBytesCover = categoryCoverImage!.readAsBytesSync();
-        String base64ImageCover = base64Encode(imageBytesCover);
-
-        request.body =
-            '''{"title": "${titleController.text.toString()}","status":$status,  "cover_img": "$base64ImageCover","img":""}''';
-      }
+    if (minOrderAmountController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter minium order amount");
+      return;
     }
-
+    if (couponValueController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter order amount");
+      return;
+    }
+    if (descriptionController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter description");
+      return;
+    }
     try {
       setState(() {
         isLoading = true;
       });
+      String? base64Image;
+      int status = couponStatus == "Publish" ? 1 : 0;
 
-      request.headers.addAll(AppConstant.headers);
-      http.StreamedResponse response = await request.send();
+      if (couponImage != null) {
+        List<int> imageBytes = couponImage!.readAsBytesSync();
+        base64Image = base64Encode(imageBytes);
+      }
+      CommonRes response = await CouponRepository().updateCouponApiCall(
+        status: status,
+        title: titleController.text.trim(),
+        img: base64Image,
+        couponAmount: couponValueController.text.trim(),
+        couponCode: couponCodeController.text.trim().toUpperCase(),
+        description: descriptionController.text.trim(),
+        expireData: couponDateController.text.toString(),
+        miniumOrderAMount: minOrderAmountController.text.trim(),
+        subtitle: subtitleController.text.trim(),
+        couponID: widget.data!.id,
+      );
 
-      if (response.statusCode == 200) {
-        AppConstant.showToastMessage("Category updated successfully");
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Coupon updated successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -492,7 +560,7 @@ class _AddCouponListScreenState extends State<AddCouponListScreen> {
       lastDate: DateTime(2101),
     );
     if (picked != null) {
-      eventDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+      couponDateController.text = DateFormat('yyyy-MM-dd').format(picked);
     }
   }
 }

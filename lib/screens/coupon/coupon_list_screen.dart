@@ -1,9 +1,8 @@
-import 'package:event/api/repository/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/coupon/coupon.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/screens/category/add_update/category_add_screen.dart';
+import 'package:event/model/coupon/coupon_model.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
-import 'package:event/screens/total%20coupon/add_update/add_coupon_list_screen.dart';
+import 'package:event/screens/coupon/add_update/add_coupon_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
 import 'package:event/widget/app_bar_title.dart';
@@ -12,7 +11,6 @@ import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class CouponListScreen extends StatefulWidget {
   const CouponListScreen({super.key});
@@ -24,22 +22,21 @@ class CouponListScreen extends StatefulWidget {
 class _CouponListScreenState extends State<CouponListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<CategoryData> categoryList = [];
+  List<CouponData> couponList = [];
   @override
   void initState() {
-    _getCategoryData();
+    _getCouponData();
     super.initState();
   }
 
-  Future _getCategoryData() async {
+  Future _getCouponData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      CouponRes response = await CouponRepository().getCouponListApiCall();
+      if (response.coupons.isNotEmpty) {
+        couponList = response.coupons;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -50,12 +47,11 @@ class _CouponListScreenState extends State<CouponListScreen> {
     }
   }
 
-  Future _getCategoryWithoutLoading() async {
+  Future _getCouponWithoutLoading() async {
     try {
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      CouponRes response = await CouponRepository().getCouponListApiCall();
+      if (response.coupons.isNotEmpty) {
+        couponList = response.coupons;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -67,7 +63,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, categoryList.length);
+    Navigator.pop(context, couponList.length);
     return false;
   }
 
@@ -79,7 +75,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, categoryList.length);
+            Navigator.pop(context, couponList.length);
           },
           title: "Coupon Code Management",
         ),
@@ -89,7 +85,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   isFromAdd: true,
                 ));
             if (response != null) {
-              _getCategoryWithoutLoading();
+              _getCouponWithoutLoading();
             }
           },
           child: Container(
@@ -117,13 +113,13 @@ class _CouponListScreenState extends State<CouponListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: categoryList.length,
+                    itemCount: couponList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return categoryWidget(
-                          data: categoryList[index], index: index);
+                      return couponWidget(
+                          data: couponList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -142,7 +138,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
     );
   }
 
-  Widget categoryWidget({CategoryData? data, int? index}) {
+  Widget couponWidget({CouponData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -151,7 +147,6 @@ class _CouponListScreenState extends State<CouponListScreen> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
       ),
-      // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,8 +175,8 @@ class _CouponListScreenState extends State<CouponListScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Coupon title",
-                  // data.title ?? '',
+                  data.title ?? '',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
@@ -189,9 +184,8 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   ),
                 ),
                 Text(
-                  "Coupon subtitle",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  data.subtitle ?? "",
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -199,9 +193,8 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   ),
                 ),
                 Text(
-                  "Coupon Code",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  'Code: ${data.coupon}',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -209,9 +202,8 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   ),
                 ),
                 Text(
-                  "Coupon Expiry Date",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  'Expire Date: ${data.endDate}',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -219,9 +211,17 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   ),
                 ),
                 Text(
-                  "Coupon Status",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  'Coupon Amount: ${data.couponAmount}',
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: AppColors.blackColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  'Order Amount: ${data.miniumAmount}',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -229,18 +229,7 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   ),
                 ),
                 Text(
-                  "Coupon Min Order Amount",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                Text(
-                  "Coupon Value",
-                  // 'Status: ${data.status}',
+                  'Status: ${data.status}',
                   maxLines: 2,
                   style: const TextStyle(
                     fontSize: 12,
@@ -256,12 +245,12 @@ class _CouponListScreenState extends State<CouponListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        var response = await Get.to(() => CategoryAddScreen(
+                        var response = await Get.to(() => AddCouponListScreen(
                               isFromAdd: false,
                               data: data,
                             ));
                         if (response != null) {
-                          _getCategoryWithoutLoading();
+                          _getCouponWithoutLoading();
                         }
                       },
                       child: const Icon(
@@ -299,12 +288,12 @@ class _CouponListScreenState extends State<CouponListScreen> {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
-        userID: categoryList[index!].id,
+      CommonRes response = await CouponRepository().couponDeleteApiCall(
+        couponID: couponList[index!].id,
       );
       if (response.responseCode == "200") {
-        categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        couponList.removeAt(index);
+        AppConstant.showToastMessage("Coupon deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

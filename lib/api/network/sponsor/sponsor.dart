@@ -33,8 +33,6 @@ class SponsorNetwork {
   }
 
   static Future<dynamic> updateSponsor(params, sponsorID) async {
-    print(sponsorID);
-    print(params);
     final result =
         await httpManager.put(url: "$updateSponsorUrl$sponsorID", data: params);
 
