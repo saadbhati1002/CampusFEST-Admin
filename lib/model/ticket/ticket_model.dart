@@ -37,8 +37,9 @@ class TicketData {
   String? price;
   String? totalTicket;
   String? ticketType;
+  String? userID;
 
-  TicketData({id, eventName, userName, price, totalTicket, ticketType});
+  TicketData({id, eventName, userName, price, totalTicket, ticketType, userID});
 
   TicketData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -47,6 +48,7 @@ class TicketData {
     price = json['price'];
     totalTicket = json['total_ticket'];
     ticketType = json['ticket_type'];
+    userID = json['user_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,6 +59,7 @@ class TicketData {
     data['price'] = price;
     data['total_ticket'] = totalTicket;
     data['ticket_type'] = ticketType;
+    data['user_id'] = userID;
     return data;
   }
 }

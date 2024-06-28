@@ -1,9 +1,11 @@
 import 'package:event/api/repository/ticket/ticket.dart';
 import 'package:event/model/ticket/ticket_model.dart';
+import 'package:event/screens/ticket/detail/ticket_detail_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/widget/app_bar_title.dart';
 import 'package:event/widget/common_skeleton.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TicketListScreen extends StatefulWidget {
   const TicketListScreen({super.key});
@@ -80,74 +82,81 @@ class _TicketListScreenState extends State<TicketListScreen> {
   }
 
   Widget ticketWidget({TicketData? data, int? index}) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      width: MediaQuery.of(context).size.width,
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => TicketDetailsScreen(
+              data: data,
+            ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        width: MediaQuery.of(context).size.width,
 
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 1, color: AppColors.appColor),
-      ),
-      // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            width: MediaQuery.of(context).size.width * .9,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  data?.eventName ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w600,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(width: 1, color: AppColors.appColor),
+        ),
+        // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              width: MediaQuery.of(context).size.width * .9,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    data?.eventName ?? '',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                Text(
-                  'User: ${data?.userName}',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'User: ${data?.userName}',
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Text(
-                  'Total Tickets: ${data?.totalTicket}',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'Total Tickets: ${data?.totalTicket}',
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Text(
-                  'Total Amount: ${data?.price}',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'Total Amount: ${data?.price}',
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-                Text(
-                  'Status: ${data?.ticketType}',
-                  maxLines: 2,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.blackColor,
-                    fontWeight: FontWeight.w400,
+                  Text(
+                    'Status: ${data?.ticketType}',
+                    maxLines: 2,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.blackColor,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
