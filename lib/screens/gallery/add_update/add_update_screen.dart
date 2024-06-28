@@ -418,30 +418,31 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
       AppConstant.showToastMessage("Please select status");
       return;
     }
-    String? base64Image;
-    int status = galleryStatus == "Publish" ? 1 : 0;
 
-    if (galleryImage != null) {
-      List<int> imageBytes = galleryImage!.readAsBytesSync();
-      base64Image = base64Encode(imageBytes);
-    }
-    CommonRes response = await GalleryRepository().updateGalleryApiCall(
-      status: status,
-      eventID: selectedEvent!.id,
-      img: base64Image,
-      galleryID: widget.data!.id,
-    );
-
-    if (response.responseCode == "200") {
-      AppConstant.showToastMessage("Gallery image updated successfully");
-      Navigator.pop(context, 1);
-    } else {
-      AppConstant.showToastMessage("Getting some error please try again");
-    }
     try {
       setState(() {
         isLoading = true;
       });
+      String? base64Image;
+      int status = galleryStatus == "Publish" ? 1 : 0;
+
+      if (galleryImage != null) {
+        List<int> imageBytes = galleryImage!.readAsBytesSync();
+        base64Image = base64Encode(imageBytes);
+      }
+      CommonRes response = await GalleryRepository().updateGalleryApiCall(
+        status: status,
+        eventID: selectedEvent!.id,
+        img: base64Image,
+        galleryID: widget.data!.id,
+      );
+
+      if (response.responseCode == "200") {
+        AppConstant.showToastMessage("Gallery image updated successfully");
+        Navigator.pop(context, 1);
+      } else {
+        AppConstant.showToastMessage("Getting some error please try again");
+      }
     } catch (e) {
       debugPrint(e.toString());
     } finally {

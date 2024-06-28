@@ -172,16 +172,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                    title: "Events Sponsors",
-                    count: dashboardData?.totalTickets ?? "0",
-                    backgroundColor: const Color.fromARGB(255, 69, 24, 59),
+                    title: "Sponsors",
+                    count: dashboardData?.totalSponsor ?? "0",
+                    backgroundColor: const Color(0xFF69245A),
                     textColor: AppColors.whiteColor,
                     image: "assets/gallery.png",
                     onTap: () async {
                       var response =
                           await Get.to(() => const SponsorsListScreen());
                       if (response != null) {
-                        dashboardData?.totalEvent = response;
+                        dashboardData?.totalSponsor = response;
                         setState(() {});
                       }
                     },
@@ -190,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
-                    title: "Total Coupon",
+                    title: "Coupon",
                     count: dashboardData?.totalOffers ?? "0",
                     backgroundColor: const Color(0xFF945AA3),
                     textColor: AppColors.whiteColor,

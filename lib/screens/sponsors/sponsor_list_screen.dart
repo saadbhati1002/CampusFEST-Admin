@@ -1,7 +1,6 @@
-import 'package:event/api/repository/category/category.dart';
-import 'package:event/model/category/category_model.dart';
+import 'package:event/api/repository/sponsor/sponsor.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/screens/category/add_update/category_add_screen.dart';
+import 'package:event/model/sponsor/sponsor_model.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/screens/sponsors/add_update/add_sponsors_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -12,7 +11,6 @@ import 'package:event/widget/custom_image_view.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class SponsorsListScreen extends StatefulWidget {
   const SponsorsListScreen({super.key});
@@ -24,22 +22,21 @@ class SponsorsListScreen extends StatefulWidget {
 class _SponsorsListScreenState extends State<SponsorsListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<CategoryData> categoryList = [];
+  List<SponsorData> sponsorList = [];
   @override
   void initState() {
-    _getCategoryData();
+    _getSponsorData();
     super.initState();
   }
 
-  Future _getCategoryData() async {
+  Future _getSponsorData() async {
     try {
       setState(() {
         isLoading = true;
       });
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      SponsorRes response = await SponsorRepository().getSponsorListApiCall();
+      if (response.sponsors.isNotEmpty) {
+        sponsorList = response.sponsors;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -50,12 +47,11 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
     }
   }
 
-  Future _getCategoryWithoutLoading() async {
+  Future _getSponsorWithoutLoading() async {
     try {
-      CategoryRes response =
-          await CategoryRepository().getCategoryListApiCall();
-      if (response.categories.isNotEmpty) {
-        categoryList = response.categories;
+      SponsorRes response = await SponsorRepository().getSponsorListApiCall();
+      if (response.sponsors.isNotEmpty) {
+        sponsorList = response.sponsors;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -67,7 +63,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, categoryList.length);
+    Navigator.pop(context, sponsorList.length);
     return false;
   }
 
@@ -79,9 +75,9 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, categoryList.length);
+            Navigator.pop(context, sponsorList.length);
           },
-          title: "Add Sponsors",
+          title: "Sponsors List",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
@@ -89,7 +85,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
                   isFromAdd: true,
                 ));
             if (response != null) {
-              _getCategoryWithoutLoading();
+              _getSponsorWithoutLoading();
             }
           },
           child: Container(
@@ -117,13 +113,13 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: categoryList.length,
+                    itemCount: sponsorList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return categoryWidget(
-                          data: categoryList[index], index: index);
+                      return sponsorWidget(
+                          data: sponsorList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -142,7 +138,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
     );
   }
 
-  Widget categoryWidget({CategoryData? data, int? index}) {
+  Widget sponsorWidget({SponsorData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
@@ -151,7 +147,6 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
       ),
-      // padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,8 +175,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Select Event",
-                  // data.title ?? '',
+                  data.title ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
@@ -189,9 +183,8 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
                   ),
                 ),
                 Text(
-                  "Sponsors Name",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  'Event Name: ${data.eventName}',
+                  maxLines: 21,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -199,9 +192,8 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
                   ),
                 ),
                 Text(
-                  "Status",
-                  // 'Status: ${data.status}',
-                  maxLines: 2,
+                  'Status: ${data.status}',
+                  maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.blackColor,
@@ -216,12 +208,14 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        var response = await Get.to(() => CategoryAddScreen(
-                              isFromAdd: false,
-                              data: data,
-                            ));
+                        var response = await Get.to(
+                          () => AddSponsorsListScreen(
+                            isFromAdd: false,
+                            data: data,
+                          ),
+                        );
                         if (response != null) {
-                          _getCategoryWithoutLoading();
+                          _getSponsorWithoutLoading();
                         }
                       },
                       child: const Icon(
@@ -235,7 +229,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        _categoryDelete(index: index);
+                        _sponsorDelete(index: index);
                       },
                       child: const Icon(
                         Icons.delete,
@@ -253,18 +247,18 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
     );
   }
 
-  Future _categoryDelete({int? index}) async {
+  Future _sponsorDelete({int? index}) async {
     try {
       setState(() {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await CategoryRepository().categoryDeleteApiCall(
-        userID: categoryList[index!].id,
+      CommonRes response = await SponsorRepository().sponsorDeleteApiCall(
+        sponsorID: sponsorList[index!].id,
       );
       if (response.responseCode == "200") {
-        categoryList.removeAt(index);
-        AppConstant.showToastMessage("Category deleted successfully");
+        sponsorList.removeAt(index);
+        AppConstant.showToastMessage("Sponsor deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

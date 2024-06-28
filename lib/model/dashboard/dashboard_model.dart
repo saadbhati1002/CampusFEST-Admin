@@ -37,6 +37,7 @@ class DashboardData {
   int? totalTickets;
   int? totalAdmins;
   int? totalGalleryImages;
+  int? totalSponsor;
 
   DashboardData(
       {totalCategories,
@@ -61,6 +62,7 @@ class DashboardData {
     totalTickets = json['total_tickets'];
     totalAdmins = json['total_admins'];
     totalGalleryImages = json['total_gallery_images'];
+    totalSponsor = json['total_sponsor'];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +76,7 @@ class DashboardData {
     data['total_offers'] = totalOffers;
     data['total_tickets'] = totalTickets;
     data['total_admins'] = totalAdmins;
+    data['total_sponsor'] = totalSponsor;
     data['total_gallery_images'] = totalGalleryImages;
     return data;
   }
