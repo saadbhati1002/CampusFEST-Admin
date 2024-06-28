@@ -8,6 +8,7 @@ import 'package:event/screens/gallery/gallery_list_screen.dart';
 import 'package:event/screens/pages/pages_list_screen.dart';
 import 'package:event/screens/sponsors/sponsor_list_screen.dart';
 import 'package:event/screens/coupon/coupon_list_screen.dart';
+import 'package:event/screens/ticket/ticket_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -167,6 +168,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: const Color(0xFF5451F9),
                     textColor: AppColors.whiteColor,
                     image: "assets/tickets.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const TicketListScreen());
+                      if (response != null) {
+                        dashboardData?.totalTickets = response;
+                        setState(() {});
+                      }
+                    },
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * .015,
