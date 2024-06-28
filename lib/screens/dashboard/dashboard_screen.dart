@@ -1,4 +1,8 @@
+import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/home/home_screen.dart';
+import 'package:event/screens/ticket/ticket_list_screen.dart';
+import 'package:event/screens/user/admin_list_screen.dart';
+import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +19,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   int _selectedIndex = 0;
   final _pageOption = [
     const HomeScreen(),
-    // const SearchPage(),
-    // const TicketStatusPage(),
-    // const Bookmark(),
-    // const Profile(""),
+    const EventListScreen(),
+    const TicketListScreen(),
+    const UserListScreen(),
+    const AdminListScreen(),
   ];
   @override
   Widget build(BuildContext context) {
