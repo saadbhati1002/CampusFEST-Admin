@@ -264,22 +264,22 @@ class _EventListScreenState extends State<EventListScreen> {
                           size: 20,
                         ),
                       ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(
-                            () => EventTicketScreen(
-                              eventID: data.id,
-                            ),
-                          );
-                        },
-                        child: Image.asset(
-                          "assets/tickets.png",
-                          color: AppColors.greyColor,
-                        ),
-                      ),
+                      // const SizedBox(
+                      //   width: 10,
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Get.to(
+                      //       () => EventTicketScreen(
+                      //         eventID: data.id,
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Image.asset(
+                      //     "assets/tickets.png",
+                      //     color: AppColors.greyColor,
+                      //   ),
+                      // ),
                     ],
                   )
                 ],

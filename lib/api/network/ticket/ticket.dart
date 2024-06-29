@@ -14,9 +14,8 @@ class TicketNetwork {
   }
 
   static Future<dynamic> getTicketDetail(param) async {
-    print(param);
     final result = await httpManager.post(url: ticketDetailUrl, data: param);
-    print(result);
+
     TicketDetailRes response = TicketDetailRes.fromJson(result);
     return response;
   }
