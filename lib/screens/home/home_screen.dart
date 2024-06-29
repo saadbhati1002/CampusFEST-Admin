@@ -1,14 +1,17 @@
 import 'package:event/api/repository/dashboard/dashboard.dart';
 import 'package:event/model/dashboard/dashboard_model.dart';
 import 'package:event/screens/category/category_list_screen.dart';
+import 'package:event/screens/cover_image/cover_image_list_screen.dart';
 import 'package:event/screens/event/event_list_screen.dart';
 import 'package:event/screens/faq/faq_list_screen.dart';
 import 'package:event/screens/faq_category/faq_category_list.dart';
 import 'package:event/screens/gallery/gallery_list_screen.dart';
 import 'package:event/screens/pages/pages_list_screen.dart';
+import 'package:event/screens/payment/payment_list_screen.dart';
 import 'package:event/screens/sponsors/sponsor_list_screen.dart';
 import 'package:event/screens/coupon/coupon_list_screen.dart';
 import 'package:event/screens/ticket/ticket_list_screen.dart';
+import 'package:event/screens/type_price/type_price_list_screen.dart';
 import 'package:event/screens/user/admin_list_screen.dart';
 import 'package:event/screens/user/user_list_screen.dart';
 import 'package:event/utils/Colors.dart';
@@ -163,6 +166,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: MediaQuery.of(context).size.height * .015,
                   ),
                   dashboardBox(
+                    title: "Type & Price",
+                    count: dashboardData?.totalEvent ?? "0",
+                    backgroundColor: Color.fromARGB(255, 140, 78, 16),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/sale.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const TypePriceListScreen());
+                      if (response != null) {
+                        dashboardData?.totalEvent = response;
+                        setState(() {});
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .015,
+                  ),
+                  dashboardBox(
+                    title: "Cover images",
+                    count: dashboardData?.totalEvent ?? "0",
+                    backgroundColor: Color.fromARGB(255, 222, 78, 25),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/gallery.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const CoverImageListScreen());
+                      if (response != null) {
+                        dashboardData?.totalEvent = response;
+                        setState(() {});
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .015,
+                  ),
+                  dashboardBox(
                     title: "Total Tickets",
                     count: dashboardData?.totalTickets ?? "0",
                     backgroundColor: const Color(0xFF5451F9),
@@ -171,6 +210,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () async {
                       var response =
                           await Get.to(() => const TicketListScreen());
+                      if (response != null) {
+                        dashboardData?.totalTickets = response;
+                        setState(() {});
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * .015,
+                  ),
+                  dashboardBox(
+                    title: "Payment",
+                    count: dashboardData?.totalTickets ?? "0",
+                    backgroundColor: Color.fromARGB(255, 140, 173, 22),
+                    textColor: AppColors.whiteColor,
+                    image: "assets/sale.png",
+                    onTap: () async {
+                      var response =
+                          await Get.to(() => const PaymentListScreen());
                       if (response != null) {
                         dashboardData?.totalTickets = response;
                         setState(() {});
