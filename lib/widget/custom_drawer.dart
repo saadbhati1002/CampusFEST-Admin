@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -10,6 +10,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  int? index;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -39,23 +40,36 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   height: 20,
                 ),
                 commonRaw(
+                  rowIndex: 0,
                   imagePath: "assets/category.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const HomeMakerScreen(),
-                    //   ),
-                    // );
+                    if (index == 0) {
+                      index = null;
+                    } else {
+                      index = 0;
+                    }
+                    setState(() {});
                   },
                   title: "Category",
                 ),
-                commonRaw2(
+                if (index == 0) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
                     onTap: () {},
-                    title1: "Add Category",
-                    title2: "List Category"),
+                    title: "Add Category",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Category",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
                   imagePath: "assets/user.png",
@@ -71,8 +85,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Coupon Code",
-                  title2: "List Coupon Code",
+                  title: "Add Coupon Code",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Coupon Code",
                 ),
                 const SizedBox(
                   height: 20,
@@ -91,8 +108,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Events",
-                  title2: "List Events",
+                  title: "Add Events",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Events",
                 ),
                 const SizedBox(
                   height: 20,
@@ -111,8 +131,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Type & Price",
-                  title2: "List  Type & Price",
+                  title: "Add Type & Price",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List  Type & Price",
                 ),
                 const SizedBox(
                   height: 20,
@@ -124,8 +147,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Cover Images",
-                  title2: "List Cover Images",
+                  title: "Add Cover Images",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Cover Images",
                 ),
                 const SizedBox(
                   height: 20,
@@ -137,8 +163,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Gallery",
-                  title2: "List Gallery",
+                  title: "Add Gallery",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Gallery",
                 ),
                 const SizedBox(
                   height: 20,
@@ -150,8 +179,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Sponsors",
-                  title2: "List Sponsors",
+                  title: "Add Sponsors",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Sponsors",
                 ),
                 const SizedBox(
                   height: 20,
@@ -170,8 +202,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add pages",
-                  title2: "List Pages",
+                  title: "Add pages",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Pages",
                 ),
                 const SizedBox(
                   height: 20,
@@ -205,8 +240,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Category",
-                  title2: "List Category",
+                  title: "Add Faq Category",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Faq Category",
                 ),
                 const SizedBox(
                   height: 20,
@@ -225,8 +263,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw2(
                   onTap: () {},
-                  title1: "Add Faq",
-                  title2: "List Faq",
+                  title: "Add Faq",
+                ),
+                commonRaw2(
+                  onTap: () {},
+                  title: "List Faq",
                 ),
                 const SizedBox(
                   height: 20,
@@ -254,6 +295,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget commonRaw({
     String? imagePath,
     String? title,
+    int? rowIndex,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
@@ -277,18 +319,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Text(
                 title!,
                 style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     color: AppColors.boxColor,
                     fontWeight: FontWeight.w500),
               )
             ],
           ),
-          const Padding(
-            padding: EdgeInsets.only(right: 15),
+          Padding(
+            padding: EdgeInsets.only(right: rowIndex == index ? 10 : 15),
             child: Icon(
-              Icons.arrow_forward_ios,
+              rowIndex == index
+                  ? Icons.keyboard_arrow_down
+                  : Icons.arrow_forward_ios,
               color: AppColors.boxColor,
-              size: 15,
+              size: rowIndex == index ? 30 : 15,
             ),
           ),
         ],
@@ -297,37 +341,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
   }
 
   Widget commonRaw2({
-    String? title1,
-    String? title2,
+    String? title,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                title1!,
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.boxColor,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Text(
-                title2!,
-                style: const TextStyle(
-                    fontSize: 16,
-                    color: AppColors.boxColor,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 35),
+        child: Text(
+          title!,
+          style: const TextStyle(
+              fontSize: 16,
+              color: AppColors.greyDarkColor,
+              fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }

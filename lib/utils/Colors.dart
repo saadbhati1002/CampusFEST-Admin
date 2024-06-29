@@ -13,6 +13,7 @@ class AppColors {
   static const Color darkMode = Color(0xff111315);
   static const Color boxColor = Color(0xff202427);
   static const Color greyColor = Color(0xff9e9e9e);
+  static const Color greyDarkColor = Color.fromARGB(255, 89, 87, 87);
   static const Color greyColorLight = Color(0xffA7AEC1);
   static const Color purpleShadow = Color(0xffede3ed);
   static const Color buttonColor = Color(0xFFFF214A);
