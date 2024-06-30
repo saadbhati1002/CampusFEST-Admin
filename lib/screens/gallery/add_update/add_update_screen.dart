@@ -46,7 +46,7 @@ class _AddGalleryScreenState extends State<AddGalleryScreen> {
         eventList = response.events;
         if (widget.isFromAdd == false) {
           for (int i = 0; i < eventList.length; i++) {
-            if (eventList[i].id == widget.data!.id) {
+            if (eventList[i].id == widget.data!.eventID) {
               selectedEvent = eventList[i];
             }
           }

@@ -1,7 +1,6 @@
-import 'package:event/api/repository/gallery/gallery.dart';
+import 'package:event/api/repository/cover_image/cover_image.dart';
 import 'package:event/model/gallery/gallery_model.dart';
 import 'package:event/screens/cover_image/add_update/add_cover_image_list_screen.dart';
-import 'package:event/screens/gallery/add_update/add_update_screen.dart';
 import 'package:event/screens/image_view/image_view_screen.dart';
 import 'package:event/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class CoverImageListScreen extends StatefulWidget {
 class _CoverImageListScreenState extends State<CoverImageListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<GalleryData> galleryList = [];
+  List<GalleryData> coverImageList = [];
   @override
   void initState() {
     _getGalleryData();
@@ -35,9 +34,10 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
       setState(() {
         isLoading = true;
       });
-      GalleryRes response = await GalleryRepository().getGalleryListApiCall();
+      GalleryRes response =
+          await CoverImageRepository().getCoverImageListApiCall();
       if (response.gallery.isNotEmpty) {
-        galleryList = response.gallery;
+        coverImageList = response.gallery;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -50,9 +50,10 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
 
   Future _getGalleryWithoutLoading() async {
     try {
-      GalleryRes response = await GalleryRepository().getGalleryListApiCall();
+      GalleryRes response =
+          await CoverImageRepository().getCoverImageListApiCall();
       if (response.gallery.isNotEmpty) {
-        galleryList = response.gallery;
+        coverImageList = response.gallery;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -64,7 +65,7 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, galleryList.length);
+    Navigator.pop(context, coverImageList.length);
     return false;
   }
 
@@ -76,9 +77,9 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, galleryList.length);
+            Navigator.pop(context, coverImageList.length);
           },
-          title: "Add Cover Image",
+          title: "Cover Image",
         ),
         floatingActionButton: GestureDetector(
           onTap: () async {
@@ -100,7 +101,7 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Add Cover Gallery",
+                    "Add Cover Image",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 14,
@@ -114,13 +115,13 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: galleryList.length,
+                    itemCount: coverImageList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
                       return galleryWidget(
-                          data: galleryList[index], index: index);
+                          data: coverImageList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -201,10 +202,11 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
                   children: [
                     GestureDetector(
                       onTap: () async {
-                        var response = await Get.to(() => AddGalleryScreen(
-                              isFromAdd: false,
-                              data: data,
-                            ));
+                        var response =
+                            await Get.to(() => AddCoverImageListScreen(
+                                  isFromAdd: false,
+                                  data: data,
+                                ));
                         if (response != null) {
                           _getGalleryWithoutLoading();
                         }
@@ -244,12 +246,12 @@ class _CoverImageListScreenState extends State<CoverImageListScreen> {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await GalleryRepository().galleryDeleteApiCall(
-        galleryID: galleryList[index!].id,
+      CommonRes response = await CoverImageRepository().coverImageDeleteApiCall(
+        coverImageID: coverImageList[index!].id,
       );
       if (response.responseCode == "200") {
-        galleryList.removeAt(index);
-        AppConstant.showToastMessage("Gallery image deleted successfully");
+        coverImageList.removeAt(index);
+        AppConstant.showToastMessage("Cover image deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

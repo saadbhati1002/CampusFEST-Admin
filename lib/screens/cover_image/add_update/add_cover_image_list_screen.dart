@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:event/api/repository/cover_image/cover_image.dart';
 import 'package:event/api/repository/event/event.dart';
-import 'package:event/api/repository/gallery/gallery.dart';
 import 'package:event/model/gallery/gallery_model.dart';
 import 'package:flutter/material.dart';
 import 'package:event/model/common/common_model.dart';
@@ -48,7 +48,7 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
         eventList = response.events;
         if (widget.isFromAdd == false) {
           for (int i = 0; i < eventList.length; i++) {
-            if (eventList[i].id == widget.data!.id) {
+            if (eventList[i].id == widget.data!.eventID) {
               selectedEvent = eventList[i];
             }
           }
@@ -82,7 +82,7 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
         onTap: () {
           Navigator.pop(context);
         },
-        title: "Cover Image List",
+        title: "Cover Image Add",
       ),
       body: Stack(
         children: [
@@ -226,7 +226,7 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
                 commonRow(
                     imageFile: galleryImage,
                     index: 1,
-                    title: 'Gallery Image',
+                    title: 'Cover Image',
                     imagePath: widget.data?.img ?? ''),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
@@ -393,11 +393,11 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
       int status = galleryStatus == "Publish" ? 1 : 0;
       List<int> imageBytes = galleryImage!.readAsBytesSync();
       String base64Image = base64Encode(imageBytes);
-      CommonRes response = await GalleryRepository().addGalleryApiCall(
+      CommonRes response = await CoverImageRepository().addCoverImageApiCall(
           status: status, eventID: selectedEvent!.id, img: base64Image);
 
       if (response.responseCode == "200") {
-        AppConstant.showToastMessage("Gallery image added successfully");
+        AppConstant.showToastMessage("Cover image added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -432,7 +432,7 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
         List<int> imageBytes = galleryImage!.readAsBytesSync();
         base64Image = base64Encode(imageBytes);
       }
-      CommonRes response = await GalleryRepository().updateGalleryApiCall(
+      CommonRes response = await CoverImageRepository().updateCoverImageApiCall(
         status: status,
         eventID: selectedEvent!.id,
         img: base64Image,
@@ -440,7 +440,7 @@ class _AddCoverImageListScreenState extends State<AddCoverImageListScreen> {
       );
 
       if (response.responseCode == "200") {
-        AppConstant.showToastMessage("Gallery image updated successfully");
+        AppConstant.showToastMessage("Cover image updated successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");

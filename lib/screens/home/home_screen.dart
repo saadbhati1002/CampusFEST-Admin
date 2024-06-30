@@ -167,15 +167,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   dashboardBox(
                     title: "Type & Price",
-                    count: dashboardData?.totalEvent ?? "0",
-                    backgroundColor: Color.fromARGB(255, 140, 78, 16),
+                    count: dashboardData?.totalPriceType ?? "0",
+                    backgroundColor: const Color(0xFF8C4E10),
                     textColor: AppColors.whiteColor,
                     image: "assets/sale.png",
                     onTap: () async {
                       var response =
                           await Get.to(() => const TypePriceListScreen());
                       if (response != null) {
-                        dashboardData?.totalEvent = response;
+                        dashboardData?.totalPriceType = response;
                         setState(() {});
                       }
                     },
@@ -185,15 +185,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   dashboardBox(
                     title: "Cover images",
-                    count: dashboardData?.totalEvent ?? "0",
-                    backgroundColor: Color.fromARGB(255, 222, 78, 25),
+                    count: dashboardData?.totalCoverImage ?? "0",
+                    backgroundColor: const Color(0xFFDE4E19),
                     textColor: AppColors.whiteColor,
                     image: "assets/gallery.png",
                     onTap: () async {
                       var response =
                           await Get.to(() => const CoverImageListScreen());
                       if (response != null) {
-                        dashboardData?.totalEvent = response;
+                        dashboardData?.totalCoverImage = response;
                         setState(() {});
                       }
                     },
@@ -221,15 +221,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   dashboardBox(
                     title: "Payment",
-                    count: dashboardData?.totalTickets ?? "0",
-                    backgroundColor: Color.fromARGB(255, 140, 173, 22),
+                    count: dashboardData?.totalPayments ?? "0",
+                    backgroundColor: const Color(0xFF8CAD16),
                     textColor: AppColors.whiteColor,
                     image: "assets/sale.png",
                     onTap: () async {
                       var response =
                           await Get.to(() => const PaymentListScreen());
                       if (response != null) {
-                        dashboardData?.totalTickets = response;
+                        dashboardData?.totalPayments = response;
                         setState(() {});
                       }
                     },

@@ -33,6 +33,7 @@ class GalleryRes {
 class GalleryData {
   String? id;
   String? eventName;
+  String? eventID;
   String? img;
   String? status;
 
@@ -43,6 +44,7 @@ class GalleryData {
     img = json['img'];
     status = json['status'];
     id = json['id'];
+    eventID = json['event_id'];
   }
 
   Map<String, dynamic> toJson() {
