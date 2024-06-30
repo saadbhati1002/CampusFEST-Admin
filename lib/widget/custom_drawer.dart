@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:flutter/material.dart';
 
@@ -72,25 +71,34 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   height: 10,
                 ),
                 commonRaw(
-                  imagePath: "assets/user.png",
+                  rowIndex: 1,
+                  imagePath: "assets/ticket.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const AddRecipeScreen(),
-                    //   ),
-                    // );
+                    if (index == 1) {
+                      index = null;
+                    } else {
+                      index = 1;
+                    }
+                    setState(() {});
                   },
                   title: "Total Tickets",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Coupon Code",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Coupon Code",
-                ),
+                if (index == 0) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Coupon Code",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Coupon Code",
+                  ),
+                ],
                 const SizedBox(
                   height: 20,
                 ),

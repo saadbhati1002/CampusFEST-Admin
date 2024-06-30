@@ -38,18 +38,22 @@ class DashboardData {
   int? totalAdmins;
   int? totalGalleryImages;
   int? totalSponsor;
+  int? totalCoverImage;
+  int? totalPriceType;
+  int? totalPayments;
 
-  DashboardData(
-      {totalCategories,
-      totalEvent,
-      totalPages,
-      totalFaqCategories,
-      totalFaqs,
-      totalUsers,
-      totalOffers,
-      totalTickets,
-      totalAdmins,
-      totalGalleryImages});
+  DashboardData({
+    totalCategories,
+    totalEvent,
+    totalPages,
+    totalFaqCategories,
+    totalFaqs,
+    totalUsers,
+    totalOffers,
+    totalTickets,
+    totalAdmins,
+    totalGalleryImages,
+  });
 
   DashboardData.fromJson(Map<String, dynamic> json) {
     totalCategories = json['total_categories'];
@@ -63,6 +67,9 @@ class DashboardData {
     totalAdmins = json['total_admins'];
     totalGalleryImages = json['total_gallery_images'];
     totalSponsor = json['total_sponsor'];
+    totalCoverImage = json['total_cover_image'];
+    totalPriceType = json['total_price_type'];
+    totalPayments = json['total_payments'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +85,9 @@ class DashboardData {
     data['total_admins'] = totalAdmins;
     data['total_sponsor'] = totalSponsor;
     data['total_gallery_images'] = totalGalleryImages;
+    data['total_cover_image'] = totalCoverImage;
+    data['total_price_type'] = totalPriceType;
+    data['total_payments'] = totalPayments;
     return data;
   }
 }
