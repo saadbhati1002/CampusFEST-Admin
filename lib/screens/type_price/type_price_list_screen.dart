@@ -1,7 +1,6 @@
-import 'package:event/api/repository/sponsor/sponsor.dart';
+import 'package:event/api/repository/price_type/price_type.dart';
 import 'package:event/model/common/common_model.dart';
-import 'package:event/model/sponsor/sponsor_model.dart';
-import 'package:event/screens/sponsors/add_update/add_sponsors_list_screen.dart';
+import 'package:event/model/price_type/price_type_model.dart';
 import 'package:event/screens/type_price/add_update/add_type_price_list_screen.dart';
 import 'package:event/utils/Colors.dart';
 import 'package:event/utils/constant.dart';
@@ -10,7 +9,6 @@ import 'package:event/widget/common_skeleton.dart';
 import 'package:event/widget/show_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class TypePriceListScreen extends StatefulWidget {
   const TypePriceListScreen({super.key});
@@ -22,7 +20,7 @@ class TypePriceListScreen extends StatefulWidget {
 class _TypePriceListScreenState extends State<TypePriceListScreen> {
   bool isLoading = false;
   bool isApiCallLoading = false;
-  List<SponsorData> sponsorList = [];
+  List<PriceTypeData> priceTypeList = [];
   @override
   void initState() {
     _getSponsorData();
@@ -34,9 +32,10 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
       setState(() {
         isLoading = true;
       });
-      SponsorRes response = await SponsorRepository().getSponsorListApiCall();
-      if (response.sponsors.isNotEmpty) {
-        sponsorList = response.sponsors;
+      PriceTypeRes response =
+          await PriceTypeRepository().getPriceTypeListApiCall();
+      if (response.priceType.isNotEmpty) {
+        priceTypeList = response.priceType;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -49,9 +48,10 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
 
   Future _getSponsorWithoutLoading() async {
     try {
-      SponsorRes response = await SponsorRepository().getSponsorListApiCall();
-      if (response.sponsors.isNotEmpty) {
-        sponsorList = response.sponsors;
+      PriceTypeRes response =
+          await PriceTypeRepository().getPriceTypeListApiCall();
+      if (response.priceType.isNotEmpty) {
+        priceTypeList = response.priceType;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -63,7 +63,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
   }
 
   Future<bool> _onBackPress() async {
-    Navigator.pop(context, sponsorList.length);
+    Navigator.pop(context, priceTypeList.length);
     return false;
   }
 
@@ -75,7 +75,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
         backgroundColor: AppColors.bgColor,
         appBar: titleAppBar(
           onTap: () {
-            Navigator.pop(context, sponsorList.length);
+            Navigator.pop(context, priceTypeList.length);
           },
           title: "Type & Price List",
         ),
@@ -113,13 +113,13 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
           children: [
             !isLoading
                 ? ListView.builder(
-                    itemCount: sponsorList.length,
+                    itemCount: priceTypeList.length,
                     physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                         horizontal: 15, vertical: 15),
                     itemBuilder: (context, index) {
-                      return sponsorWidget(
-                          data: sponsorList[index], index: index);
+                      return priceTypeWidget(
+                          data: priceTypeList[index], index: index);
                     },
                   )
                 : ListView.builder(
@@ -138,11 +138,11 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
     );
   }
 
-  Widget sponsorWidget({SponsorData? data, int? index}) {
+  Widget priceTypeWidget({PriceTypeData? data, int? index}) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * .21,
+      // height: MediaQuery.of(context).size.height * .21,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         border: Border.all(width: 1, color: AppColors.appColor),
@@ -159,8 +159,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "event name",
-                  // data.title ?? '',
+                  data?.eventName ?? '',
                   style: const TextStyle(
                     fontSize: 16,
                     color: AppColors.blackColor,
@@ -168,8 +167,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
                   ),
                 ),
                 Text(
-                  "event type",
-                  // 'Event Name: ${data.eventName}',
+                  'Type: ${data?.type}',
                   maxLines: 21,
                   style: const TextStyle(
                     fontSize: 12,
@@ -178,8 +176,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
                   ),
                 ),
                 Text(
-                  "event ticket price",
-                  // 'Status: ${data.status}',
+                  'Ticket Price: ${data?.price}',
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
@@ -187,12 +184,8 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
-                ),
                 Text(
-                  "event ticket limit",
-                  // 'Status: ${data.status}',
+                  'Limit: ${data?.ticketLimit}',
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
@@ -200,12 +193,17 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                 ),
-                const SizedBox(
-                  height: 5,
+                Text(
+                  'Ticket Sold: ${data?.ticketBook}',
+                  maxLines: 1,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: AppColors.blackColor,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 Text(
-                  "ticket status",
-                  // 'Status: ${data.status}',
+                  'Status: ${data?.status}',
                   maxLines: 1,
                   style: const TextStyle(
                     fontSize: 12,
@@ -222,7 +220,7 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
                     GestureDetector(
                       onTap: () async {
                         var response = await Get.to(
-                          () => AddSponsorsListScreen(
+                          () => AddTypePriceScreen(
                             isFromAdd: false,
                             data: data,
                           ),
@@ -266,12 +264,12 @@ class _TypePriceListScreenState extends State<TypePriceListScreen> {
         isApiCallLoading = true;
       });
 
-      CommonRes response = await SponsorRepository().sponsorDeleteApiCall(
-        sponsorID: sponsorList[index!].id,
+      CommonRes response = await PriceTypeRepository().priceTypeDeleteApiCall(
+        priceTypeID: priceTypeList[index!].id,
       );
       if (response.responseCode == "200") {
-        sponsorList.removeAt(index);
-        AppConstant.showToastMessage("Sponsor deleted successfully");
+        priceTypeList.removeAt(index);
+        AppConstant.showToastMessage("Type & Price deleted successfully");
       } else {
         AppConstant.showToastMessage(response.responseMsg);
       }

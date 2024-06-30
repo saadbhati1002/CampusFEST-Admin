@@ -1,9 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:event/model/sponsor/sponsor_model.dart';
+import 'package:event/api/repository/price_type/price_type.dart';
+import 'package:event/model/price_type/price_type_model.dart';
 import 'package:flutter/material.dart';
 import 'package:event/api/repository/event/event.dart';
-import 'package:event/api/repository/sponsor/sponsor.dart';
 import 'package:event/model/common/common_model.dart';
 import 'package:event/model/event/event_model.dart';
 import 'package:event/utils/Colors.dart';
@@ -14,7 +12,7 @@ import 'package:event/widget/show_progress_bar.dart';
 
 class AddTypePriceScreen extends StatefulWidget {
   final bool? isFromAdd;
-  final SponsorData? data;
+  final PriceTypeData? data;
   const AddTypePriceScreen({super.key, this.data, this.isFromAdd});
 
   @override
@@ -40,8 +38,14 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
     if (widget.isFromAdd == true) {
       return;
     }
-    if (widget.data!.title != null && widget.data!.title != "") {
-      // titleController.text = widget.data!.title!;
+    if (widget.data!.type != null && widget.data!.type != "") {
+      eventTypeController.text = widget.data!.type!;
+    }
+    if (widget.data!.price != null && widget.data!.price != "") {
+      eventTicketPriceController.text = widget.data!.price!;
+    }
+    if (widget.data!.ticketLimit != null && widget.data!.ticketLimit != "") {
+      eventTicketLimitController.text = widget.data!.ticketLimit!;
     }
     if (widget.data!.status != null && widget.data!.status != null) {
       sponsorStatus = widget.data!.status;
@@ -59,7 +63,7 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
         eventList = response.events;
         if (widget.isFromAdd == false) {
           for (int i = 0; i < eventList.length; i++) {
-            if (eventList[i].id == widget.data!.id) {
+            if (eventList[i].id == widget.data!.eventID) {
               selectedEvent = eventList[i];
             }
           }
@@ -172,6 +176,7 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: textfield(
+                    keyboardType: TextInputType.number,
                     controller: eventTicketPriceController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
@@ -184,14 +189,12 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: textfield(
+                    keyboardType: TextInputType.number,
                     controller: eventTicketLimitController,
                     fieldColor: AppColors.bgColor,
                     labelColor: AppColors.greyColor,
                     text: "Event Ticket Limit",
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.02,
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
@@ -262,20 +265,14 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
-                // commonRow(
-                //   imageFile: sponsorImage,
-                //   index: 1,
-                //   title: 'Sponsor Image',
-                //   imagePath: widget.data?.img ?? '',
-                // ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
                   child: GestureDetector(
                     onTap: () {
                       if (widget.isFromAdd == true) {
-                        _addSponsor();
+                        _addPriceType();
                       } else {
-                        _updateSponsor();
+                        _updatePriceType();
                       }
                     },
                     child: Container(
@@ -306,112 +303,7 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
     );
   }
 
-  // Widget commonRow(
-  //     {String? title, int? index, File? imageFile, String? imagePath}) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(horizontal: 15),
-  //     child: SizedBox(
-  //       child: Row(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           SizedBox(
-  //             width: MediaQuery.of(context).size.width * .42,
-  //             child: Text(
-  //               title!,
-  //               style: const TextStyle(
-  //                 color: AppColors.textColor,
-  //                 fontSize: 18,
-  //                 fontFamily: "Gilroy Medium",
-  //                 fontWeight: FontWeight.w600,
-  //               ),
-  //             ),
-  //           ),
-  //           if (widget.isFromAdd == true) ...[
-  //             imageFile != null
-  //                 ? GestureDetector(
-  //                     onTap: () {
-  //                       getImage(index: index);
-  //                     },
-  //                     child: Container(
-  //                       height: MediaQuery.of(context).size.height * .23,
-  //                       width: MediaQuery.of(context).size.width * .4,
-  //                       decoration: BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(10),
-  //                         image: DecorationImage(
-  //                             image: FileImage(imageFile), fit: BoxFit.cover),
-  //                       ),
-  //                     ),
-  //                   )
-  //                 : GestureDetector(
-  //                     onTap: () {
-  //                       getImage(index: index);
-  //                     },
-  //                     child: Container(
-  //                       height: 40,
-  //                       width: MediaQuery.of(context).size.width * .3,
-  //                       decoration: BoxDecoration(
-  //                         color: AppColors.appColor,
-  //                         borderRadius: BorderRadius.circular(10),
-  //                       ),
-  //                       alignment: Alignment.center,
-  //                       child: const Text(
-  //                         "Upload",
-  //                         maxLines: 1,
-  //                         style: TextStyle(
-  //                           fontFamily: "Gilroy Medium",
-  //                           color: Colors.white,
-  //                           fontSize: 14,
-  //                           fontWeight: FontWeight.w400,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //           ] else ...[
-  //             imageFile != null
-  //                 ? GestureDetector(
-  //                     onTap: () {
-  //                       getImage(index: index);
-  //                     },
-  //                     child: Container(
-  //                       height: MediaQuery.of(context).size.height * .23,
-  //                       width: MediaQuery.of(context).size.width * .4,
-  //                       decoration: BoxDecoration(
-  //                         borderRadius: BorderRadius.circular(10),
-  //                         image: DecorationImage(
-  //                             image: FileImage(imageFile), fit: BoxFit.cover),
-  //                       ),
-  //                     ),
-  //                   )
-  //                 : GestureDetector(
-  //                     onTap: () {
-  //                       getImage(index: index);
-  //                     },
-  //                     child: CustomImage(
-  //                       height: MediaQuery.of(context).size.height * .23,
-  //                       width: MediaQuery.of(context).size.width * .4,
-  //                       borderRadius: 10,
-  //                       imagePath: imagePath,
-  //                     ),
-  //                   )
-  //           ],
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Future getImage({int? index}) async {
-  //   var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     if (index == 1) {
-  //       sponsorImage = File(image.path);
-  //     }
-  //     setState(() {});
-  //   }
-  // }
-
-  Future _addSponsor() async {
+  Future _addPriceType() async {
     if (selectedEvent == null) {
       AppConstant.showToastMessage("Please select event");
       return;
@@ -421,11 +313,11 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
       return;
     }
     if (eventTicketPriceController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter event type");
+      AppConstant.showToastMessage("Please enter ticket price");
       return;
     }
     if (eventTicketLimitController.text.isEmpty) {
-      AppConstant.showToastMessage("Please enter event type");
+      AppConstant.showToastMessage("Please enter limit");
       return;
     }
     if (sponsorStatus == null) {
@@ -439,17 +331,17 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
       });
 
       int status = sponsorStatus == "Publish" ? 1 : 0;
-      // List<int> imageBytes = sponsorImage!.readAsBytesSync();
-      // String base64Image = base64Encode(imageBytes);
-      CommonRes response = await SponsorRepository().addSponsorApiCall(
+
+      CommonRes response = await PriceTypeRepository().addPriceTypeApiCall(
         status: status,
         eventID: selectedEvent!.id,
-        // img: base64Image,
-        // title: titleController.text.toString(),
+        limit: eventTicketLimitController.text.trim(),
+        price: eventTicketPriceController.text.trim(),
+        type: eventTypeController.text.trim(),
       );
 
       if (response.responseCode == "200") {
-        AppConstant.showToastMessage("Sponsor added successfully");
+        AppConstant.showToastMessage("Type & Price added successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
@@ -463,13 +355,21 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
     }
   }
 
-  Future _updateSponsor() async {
-    // if (titleController.text.isEmpty) {
-    //   AppConstant.showToastMessage("Please enter title");
-    //   return;
-    // }
+  Future _updatePriceType() async {
     if (selectedEvent == null) {
       AppConstant.showToastMessage("Please select event");
+      return;
+    }
+    if (eventTypeController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter event type");
+      return;
+    }
+    if (eventTicketPriceController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter ticket price");
+      return;
+    }
+    if (eventTicketLimitController.text.isEmpty) {
+      AppConstant.showToastMessage("Please enter limit");
       return;
     }
     if (sponsorStatus == null) {
@@ -481,23 +381,21 @@ class _AddTypePriceScreenState extends State<AddTypePriceScreen> {
       setState(() {
         isLoading = true;
       });
-      String? base64Image;
+
       int status = sponsorStatus == "Publish" ? 1 : 0;
 
-      // if (sponsorImage != null) {
-      //   List<int> imageBytes = sponsorImage!.readAsBytesSync();
-      //   base64Image = base64Encode(imageBytes);
-      // }
-      CommonRes response = await SponsorRepository().updateSponsorApiCall(
+      CommonRes response = await PriceTypeRepository().updatePriceTypeApiCall(
         status: status,
         eventID: selectedEvent!.id,
-        img: base64Image,
-        sponsorID: widget.data!.id,
+        limit: eventTicketLimitController.text.trim(),
+        price: eventTicketPriceController.text.trim(),
+        type: eventTypeController.text.trim(),
+        priceTypeID: widget.data!.id,
         // title: titleController.text.toString(),
       );
 
       if (response.responseCode == "200") {
-        AppConstant.showToastMessage("Sponsor updated successfully");
+        AppConstant.showToastMessage("Type & Price updated successfully");
         Navigator.pop(context, 1);
       } else {
         AppConstant.showToastMessage("Getting some error please try again");
