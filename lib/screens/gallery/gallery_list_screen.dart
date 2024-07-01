@@ -170,7 +170,7 @@ class _GalleryListScreenState extends State<GalleryListScreen> {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-            width: MediaQuery.of(context).size.width * .56,
+            width: MediaQuery.of(context).size.width * .55,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
