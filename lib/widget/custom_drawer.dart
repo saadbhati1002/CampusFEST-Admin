@@ -72,7 +72,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 commonRaw(
                   rowIndex: 1,
-                  imagePath: "assets/ticket.png",
+                  imagePath: "assets/tickets.png",
                   onTap: () {
                     if (index == 1) {
                       index = null;
@@ -83,7 +83,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   },
                   title: "Total Tickets",
                 ),
-                if (index == 0) ...[
+                if (index == 1) ...[
                   const SizedBox(
                     height: 10,
                   ),
@@ -100,185 +100,278 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
+                  rowIndex: 2,
                   imagePath: "assets/event.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const MyPlanesScreen(),
-                    //   ),
-                    // );
+                    if (index == 2) {
+                      index = null;
+                    } else {
+                      index = 2;
+                    }
+                    setState(() {});
                   },
                   title: "Events",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Events",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Events",
-                ),
+                if (index == 2) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Events",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Events",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
+                  rowIndex: 3,
                   imagePath: "assets/sale.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const MyRecipesScreen(),
-                    //   ),
-                    // );
+                    if (index == 3) {
+                      index = null;
+                    } else {
+                      index = 3;
+                    }
+                    setState(() {});
                   },
                   title: "Type & Price",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Type & Price",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List  Type & Price",
-                ),
+                if (index == 3) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Type & Price",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Type & Price",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
+                  rowIndex: 4,
                   imagePath: "assets/gallery.png",
-                  onTap: () {},
-                  title: "Cover images",
+                  onTap: () {
+                    if (index == 4) {
+                      index = null;
+                    } else {
+                      index = 4;
+                    }
+                    setState(() {});
+                  },
+                  title: "Cover Image",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Cover Images",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Cover Images",
-                ),
+                if (index == 4) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Cover Images",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Cover Images",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
+                  rowIndex: 5,
                   imagePath: "assets/gallery.png",
-                  onTap: () {},
+                  onTap: () {
+                    if (index == 5) {
+                      index = null;
+                    } else {
+                      index = 5;
+                    }
+                    setState(() {});
+                  },
                   title: "Events Gallery",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Gallery",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Gallery",
-                ),
+                if (index == 5) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Gallery",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Gallery",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
-                  imagePath: "assets/page.png",
-                  onTap: () {},
-                  title: "Events Sponsors",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Sponsors",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Sponsors",
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                commonRaw(
+                  rowIndex: 6,
                   imagePath: "assets/page.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const FeedbackScreen(),
-                    //   ),
-                    // );
+                    if (index == 6) {
+                      index = null;
+                    } else {
+                      index = 6;
+                    }
+                    setState(() {});
+                  },
+                  title: "Events Sponsors",
+                ),
+                if (index == 6) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Sponsors",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Sponsors",
+                  ),
+                ],
+                const SizedBox(
+                  height: 10,
+                ),
+                commonRaw(
+                  rowIndex: 7,
+                  imagePath: "assets/page.png",
+                  onTap: () {
+                    if (index == 7) {
+                      index = null;
+                    } else {
+                      index = 7;
+                    }
+                    setState(() {});
                   },
                   title: "Pages",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add pages",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Pages",
-                ),
+                if (index == 7) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Pages",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Pages",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
                   imagePath: "assets/faq.png",
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const FAQsScreen(),
-                    //   ),
-                    // );
-                  },
+                  // onTap: () {
+                  //   // Navigator.push(
+                  //   //   context,
+                  //   //   MaterialPageRoute(
+                  //   //     builder: (context) => const FAQsScreen(),
+                  //   //   ),
+                  //   // );
+                  // },
                   title: "Payment List",
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 commonRaw(
+                  rowIndex: 8,
                   imagePath: "assets/offer.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const FollowUsScreen(),
-                    //   ),
-                    // );
+                    if (index == 8) {
+                      index = null;
+                    } else {
+                      index = 8;
+                    }
+                    setState(() {});
                   },
-                  title: "faq Category",
+                  title: "Faq Category",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Faq Category",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Faq Category",
-                ),
+                if (index == 8) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Faq Category",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Faq Category",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
+                  rowIndex: 9,
                   imagePath: "assets/faq.png",
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const LoginScreen(),
-                    //   ),
-                    // );
+                    if (index == 9) {
+                      index = null;
+                    } else {
+                      index = 9;
+                    }
+                    setState(() {});
                   },
                   title: "Faq",
                 ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "Add Faq",
-                ),
-                commonRaw2(
-                  onTap: () {},
-                  title: "List Faq",
-                ),
+                if (index == 9) ...[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "Add Faq",
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  commonRaw2(
+                    onTap: () {},
+                    title: "List Faq",
+                  ),
+                ],
                 const SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
                 commonRaw(
                   imagePath: "assets/tickets.png",
